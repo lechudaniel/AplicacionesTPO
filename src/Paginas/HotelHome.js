@@ -15,17 +15,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItems from '../Componentes/Admin/listItems';
-import General from '../Componentes/Admin/General';
-import DatosHotel from '../Componentes/Admin/DatosHotel';
-import ServiciosEscuela from '../Componentes/Admin/ServiciosEscuela';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AuthController from '../Componentes/login/AuthController'
-import ReservasHotel from '../Componentes/Admin/ReservasHotel'
 import { Grid } from '@material-ui/core';
 import Logo from '../Imagenes/escudoColegio.jpg'
-import Titulares from '../Componentes/Admin/Titulares/Titulares';
-import Alumnos from '../Componentes/Admin/Alumnos/Alumnos';
-import Empleados from '../Componentes/Admin/Empleados/Empleados';
+import Titulares from '../Componentes/Admin/Envios/Titulares';
+import Alumnos from '../Componentes/Admin/Repartidores/Repartidores';
+import Clientes from '../Componentes/Admin/Clientes/Clientes';
 import Cobros from '../Componentes/Admin/Cobros/Cobros';
 import Facturas from '../Componentes/Admin/Facturación/Facturas';
 
@@ -147,7 +143,7 @@ export default function PanelControl(props) {
         setOpen(true);
     };
     const handleDrawerClose = () => {
-        setOpen(false);
+        setOpen(true);
     };
     const generalOpen = () => {
         setmodoGeneral(true);
@@ -316,9 +312,7 @@ export default function PanelControl(props) {
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
-                        <DatosHotel
-                            user={props.user}
-                        />
+                        
                     </Container>
                 </main>
             </div>
@@ -387,9 +381,7 @@ export default function PanelControl(props) {
                         <div className={classes.appBarSpacer} />
 
                         <Container maxWidth="lg" className={classes.container}>
-                            <ServiciosEscuela
-                                user={props.user}
-                            />
+                            
                         </Container>
                     </main>
                 </div>
@@ -605,7 +597,7 @@ export default function PanelControl(props) {
                                 <main className={classes.content}>
                                     <div className={classes.appBarSpacer} />
                                     <Container maxWidth="lg" className={classes.container}>
-                                        <Empleados
+                                        <Clientes
                                             user={props.user}
                                         />
                                     </Container>
@@ -676,11 +668,7 @@ export default function PanelControl(props) {
                                         <div className={classes.appBarSpacer} />
 
                                         <Container maxWidth="lg" className={classes.container}>
-                                            <General
-                                                reservasOpen={reservasOpen}
-                                                serviciosOpen={serviciosOpen}
-                                                user={props.user}
-                                            />
+                                           
                                         </Container>
                                     </main>
                                 </div>

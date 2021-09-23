@@ -56,7 +56,7 @@ class Inicio extends Component {
             precio: "",
             completado: false,
             modoHotel: true,// Si se va a trabajar en el hotel ponerlo en true
-            loading: false,
+            loading: true,
             data: [],
         };
 
@@ -98,11 +98,11 @@ class Inicio extends Component {
 
 
     getGuestInfo(email) {
-        this.setState({ loading: true });
+        this.setState({ loading: false });
         GuestAPI.getGuestInfo(email, this.handleGetGuestInfo);
     }
     getHotelInfo(email) {
-        this.setState({ loading: true });
+        this.setState({ loading: false });
         HotelAPI.getHotelInfo(email, this.handleGetHotelInfo);
     }
 

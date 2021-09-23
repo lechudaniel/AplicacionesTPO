@@ -9,7 +9,7 @@ import ErrorMessageModal from '../../Commons/ErrorMessageModal';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-import clientes from '../Empleados/dataClientes';
+import clientes from '../Clientes/dataClientes';
 
 const styles = theme => ({
     paper: {

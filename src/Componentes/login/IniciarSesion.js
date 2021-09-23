@@ -175,7 +175,7 @@ class IniciarSesion extends React.Component {
                 className={classes.botonicono}
                 onClick={this.handleOpenHotel}>
 
-                ¿Sos Empleado?
+                ¿Sos Cliente?
               </Button>
             </Grid>
           </Grid>

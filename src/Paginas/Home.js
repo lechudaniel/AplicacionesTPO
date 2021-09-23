@@ -5,16 +5,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import ListItems from '../Componentes/listItems';
-import General from '../Componentes/General';
-import Perfil from '../Componentes/MiPerfil/Perfil';
-import Reservas from '../Componentes/MiReserva/Reservas';
-import CheckIn from '../Componentes/MiReserva/CheckIn';
-import CheckOut from '../Componentes/MiReserva/CheckOut';
-import Servicios from '../Componentes/MiReserva/Servicios';
-import Resenas from '../Componentes/MiPerfil/Resenas';
-import Tarjetas from '../Componentes/MiPerfil/Tarjetas';
 import Deslizable from '../Componentes/Deslizable'
-import Historial from '../Componentes/MiReserva/Historial';
 import Ayuda from '../Componentes/Ayuda';
 
 
@@ -382,20 +373,7 @@ export default function PanelControl(props) {
                         <div className={classes.appBarSpacer} />
 
                         <Container maxWidth="lg" className={classes.container}>
-                            {<Perfil
-                                user={props.user}
-                                perfil={perfil}
-                                romanticoOpen={romanticoOpen}
-                                ejecutivoOpen={ejecutivoOpen}
-                                familiaOpen={familiaOpen}
-                                preferenciasOpen={preferenciasOpen}
-                                romantico={romantico}
-                                ejecutivo={ejecutivo}
-                                familia={familia}
-                                preferencias={preferencias}
-                                perfilCompletado={props.perfilCompletado}
-                                callPerfilCompletado={props.callPerfilCompletado}                           
-                            />}
+                            
                         </Container>
                     </main>
                 </div>
@@ -411,24 +389,7 @@ export default function PanelControl(props) {
                         <main className={classes.content}>
                             <div className={classes.appBarSpacer} />
                             <Container maxWidth="lg" className={classes.container}>
-                                <Reservas
-                                    user={props.user}
-                                    id={props.id}
-                                    CheckIn={props.CheckIn}
-                                    CheckOut={props.CheckOut}
-                                    huespedes={props.huespedes}
-                                    precio={props.precio}
-                                    reservasOpen={reservasOpen}
-                                    checkInOpen={checkInOpen}
-                                    checkOutOpen={checkOutOpen}
-                                    expanded={expanded}
-                                    contacto={contacto}
-                                    modo={"Reservas"}
-                                    callCheckIn={props.callCheckIn}
-                                    callCheckOut={props.callCheckOut}
-                                    callHuespedes={props.callHuespedes}
-                                />
-                            </Container>
+                                       </Container>
                         </main>
                     </div>
                 </ThemeProvider>
@@ -443,32 +404,7 @@ export default function PanelControl(props) {
                             <main className={classes.content}>
                                 <div className={classes.appBarSpacer} />
                                 <Container maxWidth="lg" className={classes.container}>
-                                    {<CheckIn
-                                        user={props.user}
-                                        id={props.id}
-                                        CheckIn={props.CheckIn}
-                                        CheckOut={props.CheckOut}
-                                        huespedes={props.huespedes}
-                                        precio={props.precio}
-                                        reservasOpen={reservasOpen}
-                                        checkInOpen={checkInOpen}
-                                        checkOutOpen={checkOutOpen}
-                                        modo={"Facturas"}
-                                        romantico={romantico}
-                                        ejecutivo={ejecutivo}
-                                        familia={familia}
-                                        preferencias={preferencias}
-                                        perfil={perfil}
-                                        romanticoOpen={romanticoOpen}
-                                        ejecutivoOpen={ejecutivoOpen}
-                                        familiaOpen={familiaOpen}
-                                        preferenciasOpen={preferenciasOpen}
-                                        reservasOpenContacto={reservasOpenContacto}
-                                        perfilCompletado={props.perfilCompletado}
-                                        callPerfilCompletado={props.callPerfilCompletado}
-                                        checkInOK={checkInOK}
-                                        handleCheckIn={handleCheckIn}
-                                    />}
+                                   
                                 </Container>
                             </main>
                         </div>
@@ -485,31 +421,7 @@ export default function PanelControl(props) {
                                 <main className={classes.content}>
                                     <div className={classes.appBarSpacer} />
                                     <Container maxWidth="lg" className={classes.container}>
-                                        <Servicios
-                                            user={props.user}
-                                            id={props.id}
-                                            CheckIn={props.CheckIn}
-                                            CheckOut={props.CheckOut}
-                                            huespedes={props.huespedes}
-                                            precio={props.precio}
-                                            reservasOpen={reservasOpen}
-                                            checkInOpen={checkInOpen}
-                                            checkOutOpen={checkOutOpen}
-                                            modo={"Servicios"}
-                                            romantico={romantico}
-                                            ejecutivo={ejecutivo}
-                                            familia={familia}
-                                            preferencias={preferencias}
-                                            perfil={perfil}
-                                            romanticoOpen={romanticoOpen}
-                                            ejecutivoOpen={ejecutivoOpen}
-                                            familiaOpen={familiaOpen}
-                                            preferenciasOpen={preferenciasOpen}
-                                            reservasOpenContacto={reservasOpenContacto}
-                                            perfilCompletado={props.perfilCompletado}
-                                            callPerfilCompletado={props.callPerfilCompletado}
-                                            checkInOK={checkInOK}
-                                        />
+                                       
                                     </Container>
                                 </main>
                             </div>
@@ -525,21 +437,7 @@ export default function PanelControl(props) {
                                     <main className={classes.content}>
                                         <div className={classes.appBarSpacer} />
                                         <Container maxWidth="lg" className={classes.container}>
-                                            <CheckOut
-                                                user={props.user}
-                                                id={props.id}
-                                                CheckIn={props.CheckIn}
-                                                CheckOut={props.CheckOut}
-                                                huespedes={props.huespedes}
-                                                precio={props.precio}
-                                                reservasOpen={reservasOpen}
-                                                checkInOpen={checkInOpen}
-                                                checkOutOpen={checkOutOpen}
-                                                modo={"Check-Out"}
-                                                reservasOpenContacto={reservasOpenContacto}
-                                                checkOutOK={checkOutOK}
-                                                handleCheckOut={handleCheckOut}                                             
-                                            />
+                                            
                                         </Container>
                                     </main>
                                 </div>
@@ -554,7 +452,7 @@ export default function PanelControl(props) {
                                         <main className={classes.content}>
                                             <div className={classes.appBarSpacer} />
                                             <Container maxWidth="lg" className={classes.container}>
-                                                <Resenas  />
+                                               
                                             </Container>
                                         </main>
                                     </div>
@@ -570,7 +468,7 @@ export default function PanelControl(props) {
                                             <main className={classes.content}>
                                                 <div className={classes.appBarSpacer} />
                                                 <Container maxWidth="lg" className={classes.container}>
-                                                    <Tarjetas  user={props.user} modo={"Tarjetas"} />
+                                                   
                                                 </Container>
                                             </main>
                                         </div>
@@ -587,27 +485,7 @@ export default function PanelControl(props) {
                                                     <div className={classes.appBarSpacer} />
                                                     <Container maxWidth="lg" className={classes.container}>
 
-                                                        <General
-                                                            user={props.user}
-                                                            perfilOpen={perfilOpen}
-                                                            id={props.id}
-                                                            CheckIn={props.CheckIn}
-                                                            CheckOut={props.CheckOut}
-                                                            huespedes={props.huespedes}
-                                                            precio={props.precio}
-                                                            reservasOpen={reservasOpen}
-                                                            checkInOpen={checkInOpen}
-                                                            checkOutOpen={checkOutOpen}
-                                                            perfilOpenPerfil={perfilOpenPerfil}
-                                                            romantico={romantico}
-                                                            ejecutivo={ejecutivo}
-                                                            familia={familia}
-                                                            preferencias={preferencias}
-                                                            modo={"General"}
-                                                            perfilCompletado={props.perfilCompletado}
-                                                            callPerfilCompletado={props.callPerfilCompletado}
-                                                            data={props.data}
-                                                        />
+                                                       
 
                                                     </Container>
                                                 </main>
@@ -624,10 +502,7 @@ export default function PanelControl(props) {
                                                     <main className={classes.content}>
                                                         <div className={classes.appBarSpacer} />
                                                         <Container maxWidth="lg" className={classes.container}>
-                                                            <Historial
-                                                                user={props.user}                                                               
-                                                                modo={"Cuota Activa"}                                                           
-                                                            />
+                                                           
                                                         </Container>
                                                     </main>
                                                 </div>

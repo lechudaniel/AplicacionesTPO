@@ -22,7 +22,7 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import clientes from '../Empleados/dataClientes'
+import clientes from '../Clientes/dataClientes'
 
 const styles = theme => ({
     paper: {
