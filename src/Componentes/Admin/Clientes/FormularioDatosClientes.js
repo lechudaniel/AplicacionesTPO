@@ -1,17 +1,12 @@
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { TextField, Grid, ButtonBase, Typography, Avatar, Button, Paper } from '@material-ui/core';
-import HotelInfo from '../../../Models/Hotel/HotelInfo'
-import EmpleadosAPI from '../../../Network/Clientes/EmpleadosAPI'
+import { TextField, Grid, Button, Paper } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorMessageModal from '../../Commons/ErrorMessageModal';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import clientes from './dataClientes';
+import TipoClientesDataServicio from '../../../Servicios/tipo_clientes.servicio.js';
+import ClienteDataServicio from '../../../Servicios/clientes.servicio.js';
 
 const styles = theme => ({
     paper: {
@@ -35,7 +30,7 @@ const styles = theme => ({
     }
 })
 
-class FormularioDatosEmpleados extends Component {
+class FormularioDatosCliente extends Component {
 
     constructor(props) {
         super(props);
@@ -47,9 +42,14 @@ class FormularioDatosEmpleados extends Component {
             codigoPostal: "",
             direccion: "",
             telefono: "",
+            pais: "",
+            provincia: " ",
+            id_tipo_cliente: "",
+
+            tipo_clientes: [],
+
             redOnly: false,
             lastResponse: null,
-
             loading: false,
             errorMessageIsOpen: false,
             errorMessage: ""
@@ -60,48 +60,62 @@ class FormularioDatosEmpleados extends Component {
     }
 
     componentDidMount() {
-        //  this.getHotelInfo()
+        // obtenemos todos los tipos de clientes que hay para el menu desplegable
+        this.getTipoClientes();
+    }
+
+    getTipoClientes() {
+        TipoClientesDataServicio.getAll()
+        .then(response => {
+          this.setState({
+            tipo_clientes: response.data
+          });
+        })
+        .catch(e => {
+        });
     }
 
     guardar() {
-        var clienteNuevo = [{
-            nombre: this.state.nombre,
-            apellido: this.state.apellido,
-            telefono: this.state.telefono,
-            tipo: this.state.Categoria,
-            ciudad: this.state.ciudad,
-            correo: this.state.correo,
-        }]
-        clientes.push(clienteNuevo);
-        this.setState({ edicion: false, redOnly: true });
-        /*if (this.state.nombre !== "" &&
+        if (this.state.nombre !== "" &&
             this.state.apellido !== "" &&
-            this.state.email !== "" &&
-            this.state.pais !== "" &&
-            this.state.estado !== "" &&
+            this.state.telefono !== "" &&
+            this.state.mail !== "" &&
+            this.state.id_tipo_cliente !== "" &&
             this.state.ciudad !== "" &&
-            this.state.codigoPostal !== "" &&
-            this.state.direccion !== "" &&
-            this.state.telefono1 !== "" &&
-            this.state.Categoria !== "" &&
-            this.state.Puesto !== "" &&
-            this.state.CargaHoraria !== "" &&
-            this.state.Sueldo !== "" &&
-            this.state.FechaIngreso !== ""
+            this.state.pais !== "" &&
+            this.state.provincia !== "" &&
+            this.state.cp !== ""
         ) {
-         
-            this.postEmpleadoInfo(this.getEmpleadoModel())
-
+            var clienteNuevo = {
+                nombre: this.state.nombre,
+                apellido: this.state.apellido,
+                telefono: this.state.telefono,
+                id_tipo_cliente: this.state.id_tipo_cliente,
+                mail: this.state.email,
+                ciudad: this.state.ciudad,
+                pais: this.state.pais,
+                provincia: this.state.provincia,
+                cp: this.state.codigoPostal
+            };
+            ClienteDataServicio.crear(clienteNuevo);
+            this.props.clienteCreado(clienteNuevo);
+            this.setState({ edicion: false, redOnly: true });
         } else {
             this.setState({
                 errorMessageIsOpen: true,
                 errorMessage: "Verifique si lleno todos los datos."
             });
-        }*/
+        }
     }
 
     edicionOpen() {
         this.setState({ edicion: true, redOnly: false })
+    }
+
+    findArrayElementById(array, id) {
+        return array.find((element) => {
+          return element.id === id;
+        })
     }
 
     showLoaderIfNeeded() {
@@ -119,50 +133,9 @@ class FormularioDatosEmpleados extends Component {
         }
     }
 
-
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
-    }
-    
-    postEmpleadoInfo = (empleadoData) => {
-        this.setState({ loading: true });
-        EmpleadosAPI.createEmpleado(empleadoData, this.handlePostEmpleadoInfo.bind(this));
-    }
-
-
-
-    handlePostEmpleadoInfo = async (empleadoInfo) => {
-        this.setState({ loading: false });
-        if (empleadoInfo.error !== null) {
-            //post was successful
-            this.setState({ edicion: false, redOnly: true })
-            var dict = this.getEmpleadoModel();
-            this.props.empleadoCreado(dict);
-        } else {
-            //get user with email failed
-        }
-    }
-
-    getEmpleadoModel() {
-        return {
-            nombre: this.state.nombre,
-            apellido: this.state.apellido,
-            correo: this.state.email,
-            pais: this.state.pais,
-            estado: this.state.estado,
-            ciudad: this.state.ciudad,
-            codigoPostal: this.state.codigoPostal,
-            direccion: this.state.direccion,
-            telefono: this.state.telefono1,
-            categoria: this.state.Categoria,
-            puesto: this.state.Puesto,
-            cargaHoraria: this.state.CargaHoraria,
-            sueldo: this.state.Sueldo,
-            fechaIngreso: this.state.FechaIngreso
-        };
-
-    }
-    
+    }  
 
     //Modal handlers
     closeErrorModal() {
@@ -300,12 +273,12 @@ class FormularioDatosEmpleados extends Component {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
-                                id="Telefono1"
-                                name="telefono1"
-                                label="Telefono 1"
+                                id="Telefono"
+                                name="telefono"
+                                label="Telefono"
                                 fullWidth
                                 autoComplete="Telefono1"
-                                value={this.state.telefono1}
+                                value={this.state.telefono}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
@@ -315,16 +288,18 @@ class FormularioDatosEmpleados extends Component {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 id="select" 
-                                name="Categoria"
+                                name="id_tipo_cliente"
                                 label= "categoria" 
                                 fullWidth
-                                value={this.state.Categoria}
+                                value={this.findArrayElementById(this.state.tipo_clientes, this.state.id_tipo_cliente)}
                                 autoComplete="Categoria"
                                 onChange={this.handleChange}                           
                                 select>
-                          
-                                <MenuItem value="10">Persona Juridica</MenuItem>
-                                <MenuItem value="20">Persona Fisica</MenuItem>                       
+
+                                { this.state.tipo_clientes.map((row, index) => (
+                                    <MenuItem value={row.id_tipo_cliente}>{row.tipo_cliente}</MenuItem>
+                                ))}
+      
                             </TextField>                          
                         </Grid> 
 
@@ -339,7 +314,7 @@ class FormularioDatosEmpleados extends Component {
     }
 }
 
-FormularioDatosEmpleados.propTypes = {
+FormularioDatosCliente.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(FormularioDatosEmpleados);
+export default withStyles(styles)(FormularioDatosCliente);

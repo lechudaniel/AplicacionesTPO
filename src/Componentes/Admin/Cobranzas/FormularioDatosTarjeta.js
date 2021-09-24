@@ -7,7 +7,7 @@ import mastercard from './Imagenes/mastercard.png'
 import amex from './Imagenes/amex.png'
 import mp from './Imagenes/mercadopago-logo.png'
 import Tarjeta from './TarjetaCheta/TarjetaCheta';
-import CobranzasAPI from './../../../Network/Cobranzas/CobranzasAPI';
+import CobranzasAPI from '../../../Network/Cobranzas/CobranzasAPI';
 import TarjetaVerificar from './TarjetaVerificar/TarjetaCheta'
 
 

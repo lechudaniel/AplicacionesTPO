@@ -7,27 +7,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from '../Title';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import CheckIcon from '@material-ui/icons/Check';
-import BlockIcon from '@material-ui/icons/Block';
 import { IconButton, Paper, InputBase, AppBar, Toolbar, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormularioDatosTitular from './FormularioDatosEnvio';
-import envios from './Envios';
-
-// Generate Order Data
-function createData(id,nombre, apellido, email, telefono1, ciudad) {
-    return { id, nombre, apellido, email, telefono1, ciudad };
-}
-
-const rows = [
-    createData(0, 'Emiliano', 'Da Luz', 'emiliano.daluz@gmail.com', '4793-2123', 'Acassuso'),
-    createData(1, 'Hernan', 'Quire', 'hnquire@gmail.com', '1154537898', 'Palermo'),
-];
+import FormularioDatosEnvio from './FormularioDatosEnvio';
 
 const useStyles = makeStyles(theme => ({
     seeMore: {
@@ -90,9 +76,9 @@ export default function Orders(props) {
         setModalIsOpen(false);
     };
 
-    const titularCreado = (titular) => {
+    const envioCreado = (envio) => {
         setModalIsOpen(false);
-        props.titularCreado(titular);
+        props.envioCreado(envio);
     }
 
     return (
@@ -107,7 +93,7 @@ export default function Orders(props) {
             >
             <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Complete los datos del Envio </DialogTitle>
             <DialogContent className="dialogContent">
-             <FormularioDatosTitular titularCreado = { titularCreado }/>
+             <FormularioDatosEnvio envioCreado = { envioCreado }/>
             </DialogContent>
             <DialogActions>
             </DialogActions>
@@ -147,15 +133,15 @@ export default function Orders(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        { envios.map((row, index) => (
+                        { props.envios.map((row, index) => (
                             <TableRow key={index}>
-                                <TableCell>{row.servicio}</TableCell>
+                                <TableCell>{row.servicio.servicio}</TableCell>
                                 <TableCell>{row.direccion}</TableCell>
-                                <TableCell>{row.codPostal}</TableCell>
-                                <TableCell>{row.cliente}</TableCell>
+                                <TableCell>{row.cp}</TableCell>
+                                <TableCell>{row.cliente.nombre}</TableCell>
                                 <TableCell>{row.ciudad}</TableCell>
-                                <TableCell>{row.repartidor}</TableCell>
-                                <TableCell>{row.estado}</TableCell>
+                                <TableCell>{row.repartidor.nombre}</TableCell>
+                                <TableCell>{row.estado.estado}</TableCell>
 
                             </TableRow>
                         ))}

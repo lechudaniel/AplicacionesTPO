@@ -19,6 +19,15 @@ module.exports = (sequelize, Sequelize) => {
         },
         ciudad: {
             type: Sequelize.STRING
+        },
+        pais: {
+            type: Sequelize.STRING
+        },
+        provincia: {
+            type: Sequelize.STRING
+        },
+        cp: {
+            type: Sequelize.STRING
         }
     });
 

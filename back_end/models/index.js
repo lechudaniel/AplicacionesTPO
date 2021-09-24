@@ -26,22 +26,24 @@ db.servicios = require("./servicio.model.js")(sequelize,Sequelize);
 db.repartidores = require("./repartidor.model.js")(sequelize,Sequelize);
 db.cobranzas = require("./cobranza.model.js")(sequelize,Sequelize);
 db.envios = require("./envio.model.js")(sequelize,Sequelize);
-db.repartidor_envios = require("./repartidor_envio.model.js")(sequelize,Sequelize);
+db.facturas = require("./factura.model.js")(sequelize, Sequelize);
 
 // Un cliente tiene una foreign key "id_tipo_cliente" que hace referencia a una entrada de la tabla "tipo_clientes"
 db.clientes.belongsTo(db.tipo_clientes, { as: 'tipo', foreignKey: 'id_tipo_cliente'});
 
 // Una cobranza tiene una foreign key "id_cliente" que hace referencia a un entrada de la tabla "clientes"
-db.clientes.hasOne(db.cobranzas, { foreignKey: 'id_cliente' });
-db.cobranzas.belongsTo(db.clientes)
+db.cobranzas.belongsTo(db.clientes, { as: 'cliente', foreignKey: 'id_cliente'});
+//db.clientes.hasOne(db.cobranzas, { foreignKey: 'id_cliente' });
 
-db.clientes.hasOne(db.envios, { foreignKey: 'id_cliente' });
+db.envios.belongsTo(db.clientes, {foreignKey: 'id_cliente', as: 'cliente'});
+//db.clientes.hasOne(db.envios, { foreignKey: 'id_cliente' });
+db.envios.belongsTo(db.servicios, {foreignKey: 'id_servicio', as: 'servicio'});
+//db.servicios.hasOne(db.envios, { foreignKey: 'id_servicio' });
+db.envios.belongsTo(db.estados, {foreignKey: 'id_estado', as: 'estado'});
+//db.estados.hasOne(db.envios, { foreignKey: 'id_estado' });
+db.envios.belongsTo(db.repartidores, {foreignKey: 'id_repartidor', as: 'repartidor'});
+//db.estados.hasOne(db.envios, { foreignKey: 'id_estado' });
 
-
-db.servicios.hasOne(db.envios, { foreignKey: 'id_servicio' });
-db.estados.hasOne(db.envios, { foreignKey: 'id_estado' });
-
-db.envios.hasOne(db.repartidor_envios, { foreignKey: 'id_envio' });
-db.repartidores.hasOne(db.repartidor_envios, { foreignKey: 'id_repartidor' });
+db.facturas.belongsTo(db.clientes, {foreignKey: 'id_cliente', as: 'cliente'});
 
 module.exports = db;

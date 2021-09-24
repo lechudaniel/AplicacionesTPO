@@ -2,8 +2,8 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {  Grid } from '@material-ui/core';
-import TableEmpleados from './TableClientes'
-import ClienteDataServicio from '../../../Servicios/clientes.servicio.js'
+import TableClientes from './TableClientes'
+import ClientesDataService from '../../../Servicios/clientes.servicio.js'
 
 const styles = theme => ({
 
@@ -24,16 +24,23 @@ class Clientes extends Component {
     }
 
     getClientes() {
-        ClienteDataServicio.getAll()
+        this.setState({loading:true});
+        ClientesDataService.getAll()
         .then(response => {
           this.setState({
             clientes: response.data
           });
-          console.log(response.data);
         })
         .catch(e => {
-          console.log(e);
         });
+        this.setState({loading:false});
+    }
+
+    clienteCreado = (cliente) => {
+        var clientesActualizado = this.state.clientes;
+        clientesActualizado.push(cliente);
+        this.setState({ clientes: clientesActualizado});
+        this.props.actualizarClientes(clientesActualizado);
     }
 
     render() {
@@ -41,7 +48,7 @@ class Clientes extends Component {
         return (
             <Grid container spacing={3} justify="center" alignItems="center">
             <Grid item xs={12} >
-               <TableEmpleados clientes = { this.state.clientes } />
+               <TableClientes clientes = { this.state.clientes } clienteCreado = { this.clienteCreado.bind(this)} />
             </Grid>
         </Grid>
         );

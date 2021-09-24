@@ -13,6 +13,24 @@ module.exports = (sequelize, Sequelize) => {
         },
         telefono: {
             type: Sequelize.STRING
+        },
+        dni: {
+            type: Sequelize.STRING
+        },
+        provincia: {
+            type: Sequelize.STRING
+        },
+        cp: {
+            type: Sequelize.STRING
+        },
+        direccion: {
+            type: Sequelize.STRING
+        },
+        ciudad: {
+            type: Sequelize.STRING
+        },
+        pais: {
+            type: Sequelize.STRING
         }
     });
 

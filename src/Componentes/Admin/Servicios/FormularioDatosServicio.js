@@ -2,26 +2,12 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { TextField, Grid, ButtonBase, Typography, Avatar, Button, Paper } from '@material-ui/core';
-import HotelInfo from '../../../Models/Hotel/HotelInfo'
-import HotelAPI from '../../../Network/Hotel/HotelAPI'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorMessageModal from '../../Commons/ErrorMessageModal';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import CobranzasAPI from '../../../Network/Cobranzas/CobranzasAPI'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import clientes from '../Clientes/dataClientes'
+import ServicioDataService from "../../../Servicios/servicios.servicios";
 
 const styles = theme => ({
     paper: {
@@ -48,21 +34,20 @@ const styles = theme => ({
     }
 })
 
-class FormularioDatosCobranza extends Component {
+class FormularioDatosServicio extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            id: "",
-            nombre: "",
+            servicio: "",
             tamaño: "",
             velocidad: "",
+
             edicion: true,
             redOnly: false,
             lastResponse: null,
             loading: false,
             errorMessageIsOpen: false,
-            cobranzaCreada: null,
             successMessageIsOpen: false,
 
 
@@ -74,31 +59,29 @@ class FormularioDatosCobranza extends Component {
     }
 
     componentDidMount() {
-        //  this.getHotelInfo()
     }
 
 
     guardar() {
         if (
-            this.state.formaDePago !== "" 
-            //this.state.correo !== "" &&
-            //this.state.documento !== "" &&
-            //this.state.telefono !== "" &&
-            
-            
+            this.state.servicio !== "" &&
+            this.state.tamaño !== "" &&
+            this.state.velocidad !== ""
         ) {
-            var dict = this.getCobranzaModel();
-            this.postCobranzaInfo(dict);
+            var servicioNuevo = {
+                servicio: this.state.servicio,
+                tamaño: this.state.tamaño,
+                velocidad: this.state.velocidad,
+            };
+            ServicioDataService.crear(servicioNuevo);
+            this.props.servicioCreado(servicioNuevo);
+            this.setState({ edicion: false, redOnly: true });
         } else {
             this.setState({
                 errorMessageIsOpen: true,
                 errorMessage: "Verifique si lleno todos los datos."
             });
         }
-    }
-
-    addButtonTarjeta = () => {
-        this.setState({ tarjetaIsOpen: true })
     }
 
     handleCloseModal = () => {
@@ -122,69 +105,9 @@ class FormularioDatosCobranza extends Component {
             )
         }
     }
-    handleChangeMes(e) {
-        this.setState({mesFactura: e.target.value });
-    }
-
-    handleChangeAnio(e) {
-        this.setState({anioFactura: e.target.value });
-    }
 
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
-    }
-
-    //Api Calls
-
-    postCobranzaInfo = (cobranzaData) => {
-        this.setState({ loading: true });
-        CobranzasAPI.createCobranza(cobranzaData, this.handlePostCobranzaInfo.bind(this));
-    }
-
-  
-    handlePostCobranzaInfo = async (cobranzaInfo) => {
-        this.setState({ loading: false });
-        if (cobranzaInfo.error == null) {
-            //post was successful
-            this.setState({ edicion: false,
-                 redOnly: true,
-                 cobranzaCreada: cobranzaInfo,
-                successMessageIsOpen: true })
-           
-        } else {
-            //get user with email failed
-        }
-    }
-    
-    getTitularMenuValue() {
-        if( this.state.titularSeleccionado === null ) {
-            return null;
-        } else {
-            return this.state.titularSeleccionado.nombre + " "  + this.state.titularSeleccionado.apellido
-        }
-    }
-
-    handleTitularesMenuOpen() {
-        this.setState({ titularesMenuOpen: true });
-    }
-
-    handleTitularesMenuClose() {
-        this.setState({ titularesMenuOpen: false });
-    }
-
-    handleChangeTitular(e) {
-        let titular = this.props.titulares[ e.target.value ];
-        this.setState({ titularSeleccionado: e.target.value });
-    }
-
-    getCobranzaModel() {
-        let titularSeleccionado = this.props.titulares[this.state.titularSeleccionado];
-        return {
-        
-            numeroFactura: this.state.numeroFactura,
-            formaDePago: this.state.formaDePago,
-        };
-
     }
 
     //Modal handlers
@@ -201,8 +124,6 @@ class FormularioDatosCobranza extends Component {
         const { classes } = this.props;
 
         return (
-
-            
             <Grid >
                 <Dialog
                     maxWidth="lg"
@@ -226,11 +147,11 @@ class FormularioDatosCobranza extends Component {
                         <TextField
                                 required
                                 id="nombre"
-                                name="nombre"
+                                name="servicio"
                                 label="Nombre del Servicio"
                                 fullWidth
                                 autoComplete="Nombre del Servicio"
-                                value={this.state.nombre}
+                                value={this.state.servicio}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
@@ -278,10 +199,10 @@ class FormularioDatosCobranza extends Component {
     }
 }
 
-FormularioDatosCobranza.propTypes = {
+FormularioDatosServicio.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(FormularioDatosCobranza);
+export default withStyles(styles)(FormularioDatosServicio);
 
 /*<Grid item xs={12} sm={6}>
                             <TextField

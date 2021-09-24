@@ -8,26 +8,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from '../Title';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import CheckIcon from '@material-ui/icons/Check';
-import BlockIcon from '@material-ui/icons/Block';
 import { IconButton, Paper, InputBase, AppBar, Toolbar, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormularioDatosAlumnos from './FormularioDatosRepartidores';
-import repartidores from './dataRepart';
-
-// Generate Order Data
-function createData(id,nombre, apellido, email, telefono1, ciudad) {
-    return { id, nombre, apellido, email, telefono1, ciudad };
-}
-
-const rows = [
-    createData(0, 'Martin', 'Gomez', 'martin.gomez@gmail.com', '4793-2123', 'Acassuso'),
-    createData(1, 'Elena', 'Roger', 'elenaroger@gmail.com', '1154537898', 'Palermo'),
-];
+import FormularioDatosRepartidores from './FormularioDatosRepartidores';
 
 const useStyles = makeStyles(theme => ({
     seeMore: {
@@ -90,9 +77,9 @@ export default function Orders(props) {
         setModalIsOpen(false);
     };
 
-    const alumnoCreado = (titular) => {
+    const repartidorCreado = (repartidor) => {
         setModalIsOpen(false);
-        props.alumnoCreado(titular);
+        props.repartidorCreado(repartidor);
     }
 
     return (
@@ -107,7 +94,7 @@ export default function Orders(props) {
             >
             <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Complete los datos del Repartidor </DialogTitle>
             <DialogContent className="dialogContent">
-             <FormularioDatosAlumnos titularCreado = { alumnoCreado } titulares = { props.titulares } turnos = { props.turnos }/>
+             <FormularioDatosRepartidores repartidorCreado = { repartidorCreado }/>
             </DialogContent>
             <DialogActions>
             </DialogActions>
@@ -144,7 +131,7 @@ export default function Orders(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        { repartidores.map((row, index) => (
+                        { props.repartidores.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell>{row.nombre}</TableCell>
                                 <TableCell>{row.apellido}</TableCell>

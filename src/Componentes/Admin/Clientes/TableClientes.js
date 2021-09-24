@@ -7,16 +7,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from '../Title';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import CheckIcon from '@material-ui/icons/Check';
-import BlockIcon from '@material-ui/icons/Block';
 import { IconButton, Paper, InputBase, AppBar, Toolbar, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormularioDatosEmpleados from './FormularioDatosClientes';
+import FormularioDatosCliente from './FormularioDatosClientes';
 
 const useStyles = makeStyles(theme => ({
     seeMore: {
@@ -79,9 +76,9 @@ export default function Orders(props) {
         setModalIsOpen(false);
     };
 
-    const empleadoCreado = (titular) => {
+    const clienteCreado = (cliente) => {
         setModalIsOpen(false);
-        props.empleadoCreado(titular);
+        props.clienteCreado(cliente);
     }
 
     return (
@@ -96,7 +93,7 @@ export default function Orders(props) {
             >
             <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Complete los datos del Cliente </DialogTitle>
             <DialogContent className="dialogContent">
-             <FormularioDatosEmpleados empleadoCreado = { empleadoCreado }/>
+             <FormularioDatosCliente clienteCreado = { clienteCreado }/>
             </DialogContent>
             <DialogActions>
             </DialogActions>

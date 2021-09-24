@@ -6,7 +6,17 @@ const app = express();
 
 const db = require("./models");
 db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.");
+    db.tipo_clientes.create({ tipo_cliente: "Persona Fisica"});
+    db.tipo_clientes.create({ tipo_cliente: "Persona Juridica"});
+    db.tipo_clientes.create({ tipo_cliente: "Persona Prueba"});
+
+    db.estados.create({estado:"En espera"});
+    db.estados.create({estado:"En camino"});
+    db.estados.create({estado:"Entregado"});
+
+    db.servicios.create({servicio:"Express", tamaño:"Carta", velocidad:"Prioritario"});
+    db.servicios.create({servicio:"Normal", tamaño:"Paquete hasta 3KG", velocidad:"Normal"});
+    db.servicios.create({servicio:"Economico", tamaño:"Paquete hasta 1KG", velocidad:"Sin prioridad"});
 });
 
 var corsOptions = {
@@ -33,7 +43,7 @@ require("./routes/servicios.routes.js")(app);
 require("./routes/repartidores.routes.js")(app);
 require("./routes/cobranzas.routes.js")(app);
 require("./routes/envios.routes.js")(app);
-require("./routes/repartidor_envios.routes.js")(app);
+require("./routes/facturas.routes.js")(app);
 
 // seteamos el puerto y nos quedamos esperando a que llegen requests
 const PORT = process.env.PORT || 3001;

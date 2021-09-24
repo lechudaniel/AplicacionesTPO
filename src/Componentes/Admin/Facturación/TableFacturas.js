@@ -7,9 +7,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from '../Title';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import CheckIcon from '@material-ui/icons/Check';
-import BlockIcon from '@material-ui/icons/Block';
 import { IconButton, Paper, InputBase, AppBar, Toolbar, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,24 +14,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormularioDatosFactura from './FormularioDatosFactura';
-import FormularioDatosCobranza from '../Cobros/FormularioDatosCobranza';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import Icon from '@material-ui/core/Icon';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import PaymentOutlinedIcon from '@material-ui/icons/PaymentOutlined';
-
-// Generate Order Data
-function createData(numeroFactura, titular ,alumno, turno, servicios, montoTotal, mes, año, estado) {
-    return { numeroFactura, titular ,alumno, turno, servicios, montoTotal, mes, año, estado};
-}
-
-const rows = [
-    createData(0, '123', 'Damian Perez', 'Sandra Bullock', 'Mañana', 'Desayuno, transporte', '8000', 'Noviembre', '2020'),
-    createData(1, '456', 'Roger Federer', 'Nicolas Almagro', 'Noche', 'Almuerzo', '2000','Noviembre', '2020'),
-];
 
 const useStyles = makeStyles(theme => ({
     seeMore: {
@@ -88,25 +67,7 @@ const useStyles = makeStyles(theme => ({
 export default function Orders(props) {
     const classes = useStyles();
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
-    const [modalCobranzaIsOpen, setModalCobranzaIsOpen] = React.useState(false);
-    const [cobranzas, setCobranzas] = React.useState(rows);
 
-    const addButtonTarjetaPressed = () => {
-        setModalCobranzaIsOpen(true);
-    };
-
-    const handleCloseModalCobranza = () => {
-        setModalCobranzaIsOpen(false);
-    };
-
-    const cobranzaCreado = (cobranza) => {
-        setModalCobranzaIsOpen(false);
-        var array = [];
-        cobranza["id"] = cobranzas.length;
-        var cobranzasActualizado = cobranzas;
-        cobranzasActualizado.push(cobranza);
-        return () => setCobranzas(cobranzasActualizado);
-    }
     const addButtonPressed = () => {
         setModalIsOpen(true);
     };
@@ -115,14 +76,9 @@ export default function Orders(props) {
         setModalIsOpen(false);
     };
 
-    const facturaCreado = (factura) => {
+    const facturaCreada = (factura) => {
         setModalIsOpen(false);
-        props.facturaCreado(factura);
-    }
-
-    const getFacturaDate = (stringDate) => {
-        let date = new Date(stringDate);
-        return date.toLocaleDateString();
+        props.facturaCreada(factura);
     }
 
     return (
@@ -137,26 +93,12 @@ export default function Orders(props) {
             >
             <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Datos de la Factura a emitir </DialogTitle>
             <DialogContent className="dialogContent">
-             <FormularioDatosFactura facturaCreado = { facturaCreado } turnos = { props.turnos } titulares = { props.titulares } alumnos = { props.alumnos }/>
+             <FormularioDatosFactura facturaCreada = { facturaCreada }/>
             </DialogContent>
             <DialogActions>
             </DialogActions>
             </Dialog>
-            <Dialog
-            maxWidth="lg"
-            fullWidth= {true}
-            open={modalCobranzaIsOpen}
-            onClose={handleCloseModalCobranza}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            >
-            <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Complete los datos del pago </DialogTitle>
-            <DialogContent className="dialogContent">
-             <FormularioDatosCobranza cobranzaCreado = { cobranzaCreado } turnos = { props.turnos } titulares = {props.titulares} />
-            </DialogContent>
-            <DialogActions>
-            </DialogActions>
-            </Dialog>
+           
             <AppBar position="static">
                 <Toolbar>
                     <div className={classes.search}>
@@ -184,7 +126,6 @@ export default function Orders(props) {
                         <TableRow>
                             <TableCell>Nro de Factura</TableCell>
                             <TableCell>Titular</TableCell>
-                            <TableCell>Fecha de Vencimiento</TableCell>
                             <TableCell>Monto</TableCell>
                             <TableCell>Mes</TableCell>
                             <TableCell>Año</TableCell>
@@ -195,25 +136,11 @@ export default function Orders(props) {
                     <TableBody>
                         { props.facturas.map((row, index) => (
                             <TableRow key={index}>
-                                <TableCell>{row.numeroFactura}</TableCell>
-                                <TableCell>{row.datosFacturacion.nombre + " " + row.datosFacturacion.apellido}</TableCell>
-                                <TableCell >{ getFacturaDate(row.fechaVencimiento)}</TableCell>
-                                <TableCell>{ row.totalCuota }</TableCell>
+                                <TableCell>{row.id_factura}</TableCell>
+                                <TableCell>{row.cliente.nombre + " " + row.cliente.apellido}</TableCell>
+                                <TableCell>{ row.monto }</TableCell>
                                 <TableCell>{ row.mes }</TableCell>
-                                <TableCell>{ row.anio }</TableCell>
-                                <TableCell align="center">
-                                <Button
-                                        variant="outlined"
-                                        color="default"
-                                        //className={classes.button}
-                                        startIcon={<PaymentOutlinedIcon />}
-                                        onClick={ addButtonTarjetaPressed }
-                                        
-                                    >
-                                        Registrar Pago
-                                    </Button>
-                                </TableCell>
-
+                                <TableCell>{ row.año }</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

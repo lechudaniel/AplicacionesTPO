@@ -7,7 +7,7 @@ exports.crear = (req, res) => {
     body = req.body;
 
     // Validamos la request
-    if(!body.nombre || !body.apellido || !body.mail || !body.telefono || !body.ciudad || !body.id_tipo_cliente) {
+    if(!body.nombre || !body.apellido || !body.mail || !body.telefono || !body.ciudad || !body.id_tipo_cliente || !body.pais || !body.provincia || !body.cp) {
         res.status(400).send({
             message: "Error en el contenido de la request!"
         });
@@ -20,8 +20,11 @@ exports.crear = (req, res) => {
         apellido: body.apellido,
         mail: body.mail,
         telefono: body.telefono,
+        pais: body.pais,
+        provincia: body.provincia,
         ciudad: body.ciudad,
-        id_tipo_cliente: body.id_tipo_cliente
+        id_tipo_cliente: body.id_tipo_cliente,
+        cp: body.cp
     }
 
     // Guardamos el nuevo cliente en la tabla clientes

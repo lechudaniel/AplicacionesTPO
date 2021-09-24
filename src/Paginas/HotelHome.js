@@ -19,12 +19,13 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AuthController from '../Componentes/login/AuthController'
 import { Grid } from '@material-ui/core';
 import Logo from '../Imagenes/escudoColegio.jpg'
-import Titulares from '../Componentes/Admin/Envios/Titulares';
-import Alumnos from '../Componentes/Admin/Repartidores/Repartidores';
+import Envios from '../Componentes/Admin/Envios/Envios';
+import Repartidores from '../Componentes/Admin/Repartidores/Repartidores';
 import Clientes from '../Componentes/Admin/Clientes/Clientes';
-import Cobros from '../Componentes/Admin/Cobros/Cobros';
+import Cobranzas from "../Componentes/Admin/Cobranzas/Cobranzas";
 import Facturas from '../Componentes/Admin/Facturación/Facturas';
 import Servicios from '../Componentes/Admin/Servicios/Servicios';
+
 
 const drawerWidth = 240;
 
@@ -120,20 +121,27 @@ export default function PanelControl(props) {
     const [modoSolicitudes, setmodoSolicitudes] = React.useState(true);
     const [modoResenas, setmodoResenas] = React.useState(false);
     const [modoFacturacion, setmodoFacturacion] = React.useState(false);
-    const [titulares, setTitulares] = React.useState([]);
-    const [turnos, setTurnos] = React.useState([]);
-    const [alumnos, setAlumnos] = React.useState([]);
+
+    const [cobranzas, setCobranzas] = React.useState([]);
     const [facturas, setFacturas] = React.useState([]);
+    const [clientes, setClientes] = React.useState([]);
+    const [repartidores, setRepartidores] = React.useState([]);
+    const [servicios, setServicios] = React.useState([]);
 
-    const actualizarTitulares = (titulares) => {
-        setTitulares(titulares);
-    };
-
-    const actualizarTurnos = (turnos) => {
-        setTurnos(turnos);
+    const actualizarCobranzas = (cobranzas) => {
+        setCobranzas(cobranzas);
     }
-    const actualizarAlumnos = (alumnos) => {
-        setAlumnos(alumnos);
+
+    const actualizarServicios = (servicios) => {
+        setServicios(servicios);
+    }
+
+    const actualizarRepartidores = (repartidores) => {
+        setRepartidores(repartidores);
+    }
+
+    const actualizarClientes = (clientes) => {
+        setClientes(clientes);
     }
 
     const actualizarFacturas = (facturas) => {
@@ -249,7 +257,6 @@ export default function PanelControl(props) {
     const facturacionClose = () => {
         setmodoFacturacion(false);
     };
-
 
     if (modoDatos)
         return (
@@ -382,8 +389,10 @@ export default function PanelControl(props) {
                         <div className={classes.appBarSpacer} />
 
                         <Container maxWidth="lg" className={classes.container}>
-                        <Servicios facturas = { facturas } titulares = { titulares } turnos = { turnos } alumnos = { alumnos } />
-                            
+                        <Servicios  user={props.user}
+                                    servicios={servicios}
+                                    actualizarServicios={actualizarServicios}
+                        />   
                         </Container>
                     </main>
                 </div>
@@ -452,11 +461,9 @@ export default function PanelControl(props) {
                             <div className={classes.appBarSpacer} />
 
                             <Container maxWidth="lg" className={classes.container}>
-                                <Alumnos 
-                                    titulares = { titulares }
-                                    turnos = { turnos }
-                                    alumnos = { alumnos }
-                                    actualizarAlumnos = { actualizarAlumnos }
+                                <Repartidores 
+                                    repartidores = {repartidores}
+                                    actualizarRepartidores = {actualizarRepartidores}
                                 />
                             </Container>
                         </main>
@@ -526,11 +533,8 @@ export default function PanelControl(props) {
                                 <div className={classes.appBarSpacer} />
 
                                 <Container maxWidth="lg" className={classes.container}>
-                                    <Titulares
+                                    <Envios
                                         user={props.user}
-                                        actualizarTitulares = { actualizarTitulares }
-                                        actualizarTurnos = { actualizarTurnos }
-                                        actualizarAlumnos = { actualizarAlumnos }
                                     />
                                 </Container>
                             </main>
@@ -601,6 +605,8 @@ export default function PanelControl(props) {
                                     <Container maxWidth="lg" className={classes.container}>
                                         <Clientes
                                             user={props.user}
+                                            clientes={clientes}
+                                            actualizarClientes={actualizarClientes}
                                         />
                                     </Container>
                                 </main>
@@ -740,7 +746,10 @@ export default function PanelControl(props) {
 
                                             <Container maxWidth="lg" className={classes.container}>
                                             
-                                            <Cobros facturas = { facturas } titulares = { titulares } turnos = { turnos } alumnos = { alumnos } />
+                                            <Cobranzas  user={props.user}
+                                                        cobranzas={cobranzas}
+                                                        actualizarCobranzas={actualizarCobranzas}
+                                            />   
                             
                                             </Container>
                                         </main>
@@ -810,7 +819,7 @@ export default function PanelControl(props) {
                                                         <div className={classes.appBarSpacer} />
             
                                                         <Container maxWidth="lg" className={classes.container}>
-                                                            <Facturas facturas = { facturas } titulares = { titulares } turnos = { turnos } alumnos = { alumnos } />
+                                                            <Facturas facturas = { facturas } actualizarFacturas={actualizarFacturas}/>
                                                         </Container>
                                                     </main>
                                                 </div>

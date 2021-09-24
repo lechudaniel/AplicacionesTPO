@@ -2,32 +2,47 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {  Grid } from '@material-ui/core';
-import TableAlumnos from './TableRepartidores';
-import repartidores from './dataRepart';
+import TableRepartidores from './TableRepartidores';
+import RepartidoresDataService from '../../../Servicios/repartidores.servicio';
 
 const styles = theme => ({
 
 })
 
-class Alumnos extends Component {
+class Repartidores extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            alumnos: [],
+            repartidores: [],
             loading: false,
         }
     }
 
     componentDidMount() {
-        this.setState({ alumnos: this.props.alumnos });
+        this.getRepartidores();
+        //this.setState({ repartidores: this.props.repartidores });
     }
 
-    alumnoCreado = (alumno) => {
-        var alumnosActualizado = this.props.alumnos;
-        alumnosActualizado.push(alumno);
-        this.setState({ alumnos: alumnosActualizado });
-        this.props.actualizarAlumnos(alumnosActualizado);
+    getRepartidores() {
+        this.setState({loading:true});
+        RepartidoresDataService.getAll()
+        .then(response => {
+          this.setState({
+            repartidores: response.data
+          });
+        })
+        .catch(e => {
+        });
+        this.setState({loading:false});
+    }
+
+
+    repartidorCreado = (repartidor) => {
+        var repartidoresActualizado = this.props.repartidores;
+        repartidoresActualizado.push(repartidor);
+        this.setState({ repartidores: repartidoresActualizado });
+        this.props.actualizarRepartidores(repartidoresActualizado);
     }
 
     render() {
@@ -35,17 +50,15 @@ class Alumnos extends Component {
         return (
             <Grid container spacing={3} justify="center" alignItems="center">
             <Grid item xs={12} >
-               <TableAlumnos alumnos = { this.props.alumnos }  titulares = { this.props.titulares }
-                turnos = { this.props.turnos } 
-                alumnoCreado = { this.alumnoCreado.bind(this)}/>
+               <TableRepartidores repartidores = { this.state.repartidores }  repartidorCreado = { this.repartidorCreado.bind(this)}/>
             </Grid>
         </Grid>
         );
     }
 }
 
-Alumnos.propTypes = {
+Repartidores.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Alumnos);
+export default withStyles(styles)(Repartidores);

@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 exports.crear = (req, res) => {
     body = req.body;
 
-    if(!body.nombre || !body.apellido || !body.telefono) {
+    if(!body.nombre || !body.apellido || !body.telefono || !body.dni || !body.cp || !body.provincia || !body.ciudad || !body.pais || !body.direccion) {
         res.status(400).send({
             message: "Error en el contenido de la request!"
         });

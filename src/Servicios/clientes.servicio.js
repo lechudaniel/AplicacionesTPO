@@ -1,6 +1,6 @@
 import http from "../http-common";
 
-class ClienteDataServicio {
+class ClientesDataService {
     getAll() {
         return http.post("/clientes");
     }
@@ -9,17 +9,17 @@ class ClienteDataServicio {
         return http.post(`/clientes/${id}`);
     }
 
-    create(data) {
-        return http.post("/clientes/create", data);
+    crear(data) {
+        return http.post("/clientes/crear", data);
     }
 
-    update(id, data) {
+    modificar(id, data) {
         return http.post(`/clientes/modificar/${id}`, data);
     }
 
-    delete(id) {
+    borrar(id) {
         return http.post(`/clientes/borrar/${id}`);
     }
 }
 
-export default new ClienteDataServicio();
+export default new ClientesDataService();

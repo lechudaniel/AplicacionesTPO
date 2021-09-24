@@ -7,9 +7,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from '../Title';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import CheckIcon from '@material-ui/icons/Check';
-import BlockIcon from '@material-ui/icons/Block';
 import { IconButton, Paper, InputBase, AppBar, Toolbar, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,18 +14,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormularioDatosServicio  from './FormularioDatosServicio'
-
-// Generate Order Data
-function createData(id,Nombre, Tamaño, Velocidad) {
-    return { id, Nombre, Tamaño, Velocidad, };
-}
-
-const rows = [
-    createData(0, 'Express', 'Carta', 'Prioritario'),
-    createData(1, 'Normal', "Paquete hasta 3 KG", 'Normal'),
-    createData(2, 'Economico', "Paquete hasta 1 KG", 'Sin prioridad'),
-
-];
 
 const useStyles = makeStyles(theme => ({
     seeMore: {
@@ -82,7 +67,6 @@ const useStyles = makeStyles(theme => ({
 export default function Orders(props) {
     const classes = useStyles();
     const [modalCobranzaIsOpen, setModalIsOpen] = React.useState(false);
-    const [cobranzas, setCobranzas] = React.useState(rows);
 
     const addButtonPressed = () => {
         setModalIsOpen(true);
@@ -92,13 +76,9 @@ export default function Orders(props) {
         setModalIsOpen(false);
     };
 
-    const cobranzaCreado = (cobranza) => {
+    const servicioCreado = (servicio) => {
         setModalIsOpen(false);
-        var array = [];
-        cobranza["id"] = cobranzas.length;
-        var cobranzasActualizado = cobranzas;
-        cobranzasActualizado.push(cobranza);
-        return () => setCobranzas(cobranzasActualizado);
+        props.servicioCreado(servicio);
     }
 
     return (
@@ -113,7 +93,7 @@ export default function Orders(props) {
             >
             <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Complete los datos del Servicio </DialogTitle>
             <DialogContent className="dialogContent">
-             <FormularioDatosServicio cobranzaCreado = { cobranzaCreado } turnos = { props.turnos } titulares = {props.titulares} />
+             <FormularioDatosServicio servicioCreado = { servicioCreado } />
             </DialogContent>
             <DialogActions>
             </DialogActions>
@@ -143,7 +123,6 @@ export default function Orders(props) {
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Número de Servicio</TableCell>
                             <TableCell>Nombre</TableCell>
                             <TableCell>Tamaño</TableCell>
                             <TableCell>Velocidad de Entrega</TableCell>
@@ -152,12 +131,11 @@ export default function Orders(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        { cobranzas.map((row, index) => (
+                        { props.servicios.map((row, index) => (
                             <TableRow key={index}>
-                                <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.Nombre}</TableCell>
-                                <TableCell>{row.Tamaño}</TableCell>
-                                <TableCell>{row.Velocidad}</TableCell>
+                                <TableCell>{row.servicio}</TableCell>
+                                <TableCell>{row.tamaño}</TableCell>
+                                <TableCell>{row.velocidad}</TableCell>
                                
                             </TableRow>
                         ))}

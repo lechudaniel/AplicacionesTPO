@@ -15,16 +15,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormularioDatosCobranza from './FormularioDatosCobranza';
 
-// Generate Order Data
-function createData(id,numeroTransaccion, alumno, titular, totalCuota, fechaEmision) {
-    return { id, numeroTransaccion, alumno, titular, totalCuota, fechaEmision };
-}
-
-const rows = [
-    createData(0, '000000001', 'Sebastian Gomez', '$27350', '02-09-2021','000000011'),
-    createData(1, '000000002', 'Nicolas Roger', '$27350', '02-09-2021', '000000012'),
-];
-
 const useStyles = makeStyles(theme => ({
     seeMore: {
         marginTop: theme.spacing(3),
@@ -77,7 +67,6 @@ const useStyles = makeStyles(theme => ({
 export default function Orders(props) {
     const classes = useStyles();
     const [modalCobranzaIsOpen, setModalIsOpen] = React.useState(false);
-    const [cobranzas, setCobranzas] = React.useState(rows);
 
     const addButtonPressed = () => {
         setModalIsOpen(true);
@@ -87,13 +76,9 @@ export default function Orders(props) {
         setModalIsOpen(false);
     };
 
-    const cobranzaCreado = (cobranza) => {
+    const cobranzaCreada = (cobranza) => {
         setModalIsOpen(false);
-        var array = [];
-        cobranza["id"] = cobranzas.length;
-        var cobranzasActualizado = cobranzas;
-        cobranzasActualizado.push(cobranza);
-        return () => setCobranzas(cobranzasActualizado);
+        props.cobranzaCreada(cobranza);
     }
 
     return (
@@ -108,7 +93,7 @@ export default function Orders(props) {
             >
             <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Complete los datos del pago </DialogTitle>
             <DialogContent className="dialogContent">
-             <FormularioDatosCobranza cobranzaCreado = { cobranzaCreado } turnos = { props.turnos } titulares = {props.titulares} />
+             <FormularioDatosCobranza cobranzaCreada = { cobranzaCreada } />
             </DialogContent>
             <DialogActions>
             </DialogActions>
@@ -139,21 +124,21 @@ export default function Orders(props) {
                     <TableHead>
                         <TableRow>
                             <TableCell>Número de transacción</TableCell>
-                            <TableCell>Monto</TableCell>
-                            <TableCell>Fecha Emision</TableCell>
                             <TableCell>Titular</TableCell>
-                     
+                            <TableCell>Total</TableCell>
+                            <TableCell>Fecha de Emision</TableCell>
+                            <TableCell>Forma de Pagon</TableCell>
                            
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        { cobranzas.map((row, index) => (
+                        { props.cobranzas.map((row, index) => (
                             <TableRow key={index}>
-                                <TableCell>{row.numeroTransaccion}</TableCell>
-                                <TableCell>{row.titular}</TableCell>
-                                <TableCell>{row.totalCuota}</TableCell>
-                                <TableCell>{row.fechaEmision}</TableCell>
-                               
+                                <TableCell>{row.id_cobranza}</TableCell>
+                                <TableCell>{row.cliente.nombre} {row.cliente.apellido}</TableCell>
+                                <TableCell>{row.monto}</TableCell>
+                                <TableCell>{row.fecha_emision}</TableCell>
+                                <TableCell>{row.forma_de_pago}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

@@ -2,13 +2,13 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { TextField, Grid, ButtonBase, Typography, Avatar, Button, Paper } from '@material-ui/core';
-import HotelInfo from '../../../Models/Hotel/HotelInfo'
-import TitularesAPI from '../../../Network/Titulares/TitularesAPI'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorMessageModal from '../../Commons/ErrorMessageModal';
 import MenuItem from '@material-ui/core/MenuItem';
-import clientes from '../Clientes/dataClientes';
-import repartidores from '../Repartidores/dataRepart'
+import ClientesDataService from "../../../Servicios/clientes.servicio";
+import EnvioDataService from "../../../Servicios/envios.servicio";
+import ServiciosDataService from "../../../Servicios/servicios.servicios";
+import RepartidoresDataService from "../../../Servicios/repartidores.servicio";
 
 const styles = theme => ({
     paper: {
@@ -32,23 +32,23 @@ const styles = theme => ({
     }
 })
 
-class FormularioDatosTitular extends Component {
+class FormularioDatosEnvio extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            nombre: "",
-            apellido: "",
-            email: "",
-            documento:"",
-            pais: "",
-            provincia: "",
-            ciudad: "",
-            codigoPostal: "",
+            id_servicio: "",
             direccion: "",
-            telefono1: "",
-            telefono2: "",
-            estrellas: "",
+            id_cliente: "",
+            ciudad: "",
+            cp: "",
+            id_estado: "1",
+            id_repartidor: "",
+            
+            repartidores: [],
+            servicios: [],
+            clientes: [],
+
             edicion: true,
             redOnly: false,
             lastResponse: null,
@@ -63,24 +63,78 @@ class FormularioDatosTitular extends Component {
     }
 
     componentDidMount() {
-        //  this.getHotelInfo()
+        this.getRepartidores();
+        this.getClientes();
+        this.getServicios();
+    }
+
+    getServicios() {
+        this.setState({loading:true});
+        ServiciosDataService.getAll()
+        .then(response => {
+          this.setState({
+            servicios: response.data
+          });
+        })
+        .catch(e => {
+        });
+        this.setState({loading:false});
+    }
+
+    getClientes() {
+        this.setState({loading:true});
+        ClientesDataService.getAll()
+        .then(response => {
+          this.setState({
+            clientes: response.data
+          });
+        })
+        .catch(e => {
+        });
+        this.setState({loading:false});
+    }
+
+    getRepartidores() {
+        this.setState({loading:true});
+        RepartidoresDataService.getAll()
+        .then(response => {
+          this.setState({
+            repartidores: response.data
+          });
+        })
+        .catch(e => {
+        });
+        this.setState({loading:false});
+    }
+
+    findArrayElementById(array, id) {
+        return array.find((element) => {
+          return element.id === id;
+        })
     }
 
     guardar() {
-        if (this.state.nombre !== "" &&
-            this.state.apellido !== "" &&
-            this.state.email !== "" &&
-            this.state.pais !== "" &&
-            this.state.provincia !== "" &&
-            this.state.ciudad !== "" &&
-            this.state.codigoPostal !== "" &&
+        if (this.state.id_servicio !== "" &&
             this.state.direccion !== "" &&
-            this.state.telefono1 !== "" &&
-            this.state.telefono2 !== ""&&
-            this.state.documento !==""
+            this.state.id_cliente !== "" &&
+            this.state.ciudad !== "" &&
+            this.state.cp !== "" &&
+            this.state.id_estado !== "" &&
+            this.state.id_repartidor !== ""
         ) {
-            
-            this.postTitularInfo(this.getHotelModel())
+            var envioNuevo = {
+                id_servicio: this.state.id_servicio,
+                direccion: this.state.direccion,
+                id_cliente: this.state.id_cliente,
+                ciudad: this.state.ciudad,
+                cp: this.state.cp,
+                id_estado: this.state.id_estado,
+                id_repartidor: this.state.id_repartidor
+            };
+
+            EnvioDataService.crear(envioNuevo)
+    
+            this.setState({ edicion: false, redOnly: true });
         } else {
             this.setState({
                 errorMessageIsOpen: true,
@@ -112,40 +166,6 @@ class FormularioDatosTitular extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    //Api Calls
-    postTitularInfo = (titularData) => {
-        this.setState({ loading: true });
-        TitularesAPI.createTitular(titularData, this.handlePostTitularInfo.bind(this));
-    }
-
-    handlePostTitularInfo = async (titularInfo) => {
-        this.setState({ loading: false });
-        if (titularInfo.error == null) {
-            //post was successful
-            this.setState({ edicion: false, redOnly: true })
-            var dict = this.getHotelModel();
-            this.props.titularCreado(dict);
-        } else {
-            //get user with email failed
-        }
-    }
-
-    getHotelModel() {
-        return {
-            nombre: this.state.nombre,
-            apellido: this.state.apellido,
-            correo: this.state.email,
-            pais: this.state.pais,
-            estado: this.state.provincia,
-            ciudad: this.state.ciudad,
-            codigoPostal: this.state.codigoPostal,
-            direccion: this.state.direccion,
-            telefonoContacto: this.state.telefono1,
-            telefono2: this.state.telefono2,
-            documento: this.state.documento,
-        };
-    }
-
     //Modal handlers
     closeErrorModal() {
         this.setState({ errorMessageIsOpen: false }, this.forceUpdate());
@@ -162,16 +182,17 @@ class FormularioDatosTitular extends Component {
                         <Grid item xs={12} sm={6}>
                         <TextField
                                 id="select" 
-                                name="Servicio"
+                                name="id_servicio"
                                 label= "Servicio" 
                                 fullWidth
-                                value={this.state.Ser}
+                                value={this.findArrayElementById(this.state.servicios, this.state.id_servicio)}
                                 autoComplete="Servicio"
                                 onChange={this.handleChange}                           
                                 select>
-                                <MenuItem value="10">Servicio Premium</MenuItem>
-                                <MenuItem value="20">Servicio Normal</MenuItem>  
-                                <MenuItem value="30">Servicio Express</MenuItem>                       
+
+                                { this.state.servicios.map((row, index) => (
+                                    <MenuItem value={row.id_servicio}>{row.servicio}</MenuItem>
+                                ))}                   
                             </TextField>
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -182,7 +203,7 @@ class FormularioDatosTitular extends Component {
                                 label="Direccion de entrega"
                                 fullWidth
                                 autoComplete="Nombre"
-                                value={this.state.nombre}
+                                value={this.state.direccion}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
@@ -193,11 +214,11 @@ class FormularioDatosTitular extends Component {
                             <TextField
                                 required
                                 id="Codigo Postal"
-                                name="Cosidgo Postal"
+                                name="cp"
                                 label="Codigo Postal"
                                 fullWidth
                                 autoComplete="Codigo Postal"
-                                value={this.state.apellido}
+                                value={this.state.cp}
                                 onChange={this.handleChange}
                                 
                             />
@@ -206,11 +227,11 @@ class FormularioDatosTitular extends Component {
                             <TextField
                                 required
                                 id="Ciudad"
-                                name="Ciudad"
+                                name="ciudad"
                                 label="Ciudad"
                                 fullWidth
                                 autoComplete="Ciudad"
-                                value={this.state.email}
+                                value={this.state.ciudad}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
@@ -220,44 +241,46 @@ class FormularioDatosTitular extends Component {
                         <Grid item xs = {12} sm = {6}>
                             <TextField
                                 id="cliente" 
-                                name="Clientes"
+                                name="id_cliente"
                                 label= "Cliente" 
                                 fullWidth
-                                value={this.state.Ser}
+                                value={this.findArrayElementById(this.state.clientes, this.state.id_cliente)}
                                 autoComplete="Cliente"
                                 onChange={this.handleChange}                           
                                 select>
-                                { clientes.map((row, index) => (
-                                <MenuItem key = {index}>{row.nombre}  {row.apellido}</MenuItem>
-                        ))}    
+
+                                { this.state.clientes.map((row, index) => (
+                                    <MenuItem value={row.id_cliente}>{row.nombre}  {row.apellido}</MenuItem>
+                                ))}      
                             </TextField>           
                         </Grid>
                         <Grid item xs = {12} sm = {6}>
                             <TextField
                                 id="select" 
-                                name="Repartidor"
+                                name="id_repartidor"
                                 label= "Repartidor" 
                                 fullWidth
-                                value={this.state.Ser}
+                                value={this.findArrayElementById(this.state.repartidores, this.state.id_repartidor)}
                                 autoComplete="Repartidor"
                                 onChange={this.handleChange}                           
                                 select>
-                                { repartidores.map((row, index) => (
-                                <MenuItem key = {index}>{row.nombre}  {row.apellido}</MenuItem>
-                        ))}    
+
+                                { this.state.repartidores.map((row, index) => (
+                                    <MenuItem value={row.id_repartidor}>{row.nombre}  {row.apellido}</MenuItem>
+                                ))}      
                             </TextField>           
                         </Grid>
                     </Grid>
                 </Paper>
                 <Button className = { classes.createButton } variant= "contained" onClick={ this.guardar.bind(this) } color="primary" autoFocus>
-                    Crear titular
+                    Crear Envio
                 </Button>
             </Grid>
         );
     }
 }
 
-FormularioDatosTitular.propTypes = {
+FormularioDatosEnvio.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(FormularioDatosTitular);
+export default withStyles(styles)(FormularioDatosEnvio);

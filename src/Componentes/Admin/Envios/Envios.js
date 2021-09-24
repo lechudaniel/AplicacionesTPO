@@ -1,35 +1,61 @@
-import repartidores from '../Repartidores/dataRepart'
-import clientes from '../Clientes/dataClientes'
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import {  Grid } from '@material-ui/core';
+import TableEnvios from './TableEnvios'
+import EnviosDataService from '../../../Servicios/envios.servicio';
 
+const styles = theme => ({
 
-let envios = [{
-    id: 1,
-    servicio: "Premium",
-    direccion: "David Magdalena 4435",
-    ciudad: "Caseros",
-    codPostal: "1678",
-    repartidor: repartidores[0].apellido,
-    estado: "Entregado",
-    cliente: clientes[0].apellido
-},{
-    id: 2,
-    servicio: "Express",
-    direccion: "Av Libertador 50001",
-    ciudad: "Vicente Lopez",
-    codPostal: "2005",
-    repartidor: repartidores[1].apellido,
-    estado: "En proceso",
-    cliente: clientes[1].nombre,
+})
 
-},{
-    id: 1,
-    servicio: "Normal",
-    direccion: "San Martin 2355",
-    codPostal: "6785",
-    ciduad: "Capital Federal",
-    repartidor: repartidores[1].apellido,
-    estado: "Error (404)",
-    cliente: clientes[0].apellido,
-}]
+class Envios extends Component {
 
-export default envios;
+    constructor(props) {
+        super(props);
+        this.state = {
+            envios: [],
+            loading: false,
+        }
+    }
+
+    componentDidMount() {
+        this.getEnvios();
+    }
+
+    getEnvios() {
+        this.setState({loading:true});
+        EnviosDataService.getAll()
+        .then(response => {
+          this.setState({
+            envios: response.data
+          });
+        })
+        .catch(e => {
+        });
+        this.setState({loading:false});
+    }
+
+    envioCreado = (envio) => {
+        var enviosActualizado = this.state.envios;
+        enviosActualizado.push(envio);
+        this.setState({ envios: enviosActualizado});
+    }
+
+    render() {
+        //const { classes } = this.props;
+        return (
+            <Grid container spacing={3} justify="center" alignItems="center">
+            <Grid item xs={12} >
+               <TableEnvios envios = { this.state.envios } envioCreado = { this.envioCreado.bind(this)} />
+            </Grid>
+        </Grid>
+        );
+    }
+}
+
+Envios.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Envios);

@@ -7,7 +7,7 @@ exports.crear = (req, res) => {
     body = req.body;
 
     // Validamos la request
-    if(!body.nro_transaccion || !body.monto || !body.fecha_emision || !body.id_cliente) {
+    if(!body.monto || !body.fecha_emision || !body.id_cliente || !body.forma_de_pago) {
         res.status(400).send({
             message: "Error en el contenido de la request!"
         });
@@ -16,10 +16,10 @@ exports.crear = (req, res) => {
     }
 
     const cobranza = {
-        nro_transaccion: body.nro_transaccion,
         monto: body.monto,
         fecha_emision: body.fecha_emision,
         id_cliente: body.id_cliente,
+        forma_de_pago: body.forma_de_pago
     }
 
     // Guardamos el nuevo cobranza en la tabla cobranzas
@@ -38,7 +38,7 @@ exports.crear = (req, res) => {
 
 // Obtiene todas los cobranzas
 exports.obtener_todos = (req, res) => {
-    Cobranzas.findAll()
+    Cobranzas.findAll({ include: ["cliente"] })
         .then(data => {
             res.send(data);
         })

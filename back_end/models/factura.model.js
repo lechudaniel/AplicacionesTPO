@@ -1,20 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
-    const Servicio = sequelize.define("servicios", {
-        id_servicio: {
+    const Factura = sequelize.define("facturas", {
+        id_factura: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        servicio: {
+        año: {
             type: Sequelize.STRING
         },
-        tamaño: {
+        mes: {
             type: Sequelize.STRING
         },
-        velocidad: {
+        monto: {
             type: Sequelize.STRING
         }
     });
 
-    return Servicio;
+    return Factura;
 }

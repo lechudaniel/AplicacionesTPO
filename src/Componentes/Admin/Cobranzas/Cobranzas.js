@@ -2,34 +2,33 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {  Grid } from '@material-ui/core';
-import TableFacturas from './TableFacturas'
-import FacturasDataService from "../../../Servicios/facturas.servicio";
+import TableCobranzas from './TableCobranzas'
+import CobranzasDataService from "../../../Servicios/cobranzas.servicio";
 
 const styles = theme => ({
 
 })
 
-class Facturas extends Component {
+class Cobranzas extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            facturas: [],
+            cobranzas: [],
             loading: false,
         }
     }
 
     componentDidMount() {
-        this.getFacturas();
+        this.getCobranzas();
     }
 
-    //Api Calls
-    getFacturas() {
+    getCobranzas() {
         this.setState({loading:true});
-        FacturasDataService.getAll()
+        CobranzasDataService.getAll()
         .then(response => {
           this.setState({
-            facturas: response.data
+            cobranzas: response.data
           });
         })
         .catch(e => {
@@ -37,26 +36,28 @@ class Facturas extends Component {
         this.setState({loading:false});
     }
 
-    facturaCreada = (factura) => {
-        var facturasActualizadas = this.state.facturas;
-        facturasActualizadas.push(factura);
-        this.setState({ facturas: facturasActualizadas});
+    cobranzaCreada = (cobranza) => {
+        var cobranzasActualizado = this.state.cobranzas;
+        cobranzasActualizado.push(cobranza);
+        this.setState({ cobranzas: cobranzasActualizado});
+        this.props.actualizarCobranzas(cobranzasActualizado);
     }
+
 
     render() {
         //const { classes } = this.props;
         return (
             <Grid container spacing={3} justify="center" alignItems="center">
             <Grid item xs={12} >
-            <TableFacturas facturas = {this.state.facturas} facturaCreada = { this.facturaCreada.bind(this)}/>
+               <TableCobranzas cobranzas = { this.state.cobranzas } cobranzaCreada = { this.cobranzaCreada.bind(this)} />
             </Grid>
         </Grid>
         );
     }
 }
 
-Facturas.propTypes = {
+Cobranzas.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Facturas);
+export default withStyles(styles)(Cobranzas);

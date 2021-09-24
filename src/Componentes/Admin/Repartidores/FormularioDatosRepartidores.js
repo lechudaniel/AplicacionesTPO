@@ -2,10 +2,9 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { TextField, Grid, ButtonBase, Typography, Avatar, Button, Paper } from '@material-ui/core';
-import HotelInfo from '../../../Models/Hotel/HotelInfo'
-import AlumnosAPI from '../../../Network/Alumnos/AlumnosAPI'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorMessageModal from '../../Commons/ErrorMessageModal';
+import RepartidoresDataService from "../../../Servicios/repartidores.servicio";
 
 const styles = theme => ({
     paper: {
@@ -29,50 +28,28 @@ const styles = theme => ({
     }
 })
 
-class FormularioDatosAlumnos extends Component {
+class FormularioDatosRepartidores extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            titularSeleccionado: null,
-            titularesMenuOpen: false,
-            turnoSeleccionado: null,
-            turnosMenuOpen: false,
             nombre: "",
             apellido: "",
-            email: "",
+            telefono: "",
+            dni: "",
             pais: "",
-            estado: "",
-            ciudad: "",
-            codigoPostal: "",
+            cp: "",
+            provincia: "",
             direccion: "",
-            telefono1: "",
-            telefono2: "",
-            estrellas: "",
+            ciudad: "",
+
             edicion: true,
             redOnly: false,
             lastResponse: null,
-            titular: "",
             loading: false,
             errorMessageIsOpen: false,
             successMessageIsOpen: false,
-            alumnoInfo: null,
             errorMessage: "",
-            gimnasio:false,
-            futbol:false,
-            tenis:false,
-            hockey:false,
-            ingles:false,
-            portugues:false,
-            frances:false,
-            danza:false,
-            teatro:false,
-            pintura:false,
-            musica:false,
-            desayuno:false,
-            almuerzo:false,
-            merienda:false,
-            transporte:false,
         }
         this.handleChange = this.handleChange.bind(this);
         this.edicionOpen = this.edicionOpen.bind(this);
@@ -80,53 +57,33 @@ class FormularioDatosAlumnos extends Component {
     }
 
     componentDidMount() {
-        //  this.getHotelInfo()
     }
 
-    //Menu
-    handleTitularesMenuOpen() {
-        this.setState({ titularesMenuOpen: true });
-    }
-
-    handleTitularesMenuClose() {
-        this.setState({ titularesMenuOpen: false });
-    }
-
-    handleTurnosMenuOpen() {
-        this.setState({ turnosMenuOpen: true });
-    }
-
-    handleTurnosMenuClose() {
-        this.setState({ turnosMenuOpen: false });
-    }
-
-    getTitularMenuValue() {
-        if( this.state.titularSeleccionado === null ) {
-            return null;
-        } else {
-            return this.state.titularSeleccionado.nombre + " "  + this.state.titularSeleccionado.apellido
-        }
-    }
-
-    //API Calls
     guardar() {
-        {console.log(this.state.gimnasio)}
-        if (this.state.titularSeleccionado !== null,
-            this.state.turnoSeleccionado !== null,
-            this.state.nombre !== "" &&
+        if (this.state.nombre !== "" &&
             this.state.apellido !== "" &&
+            this.state.telefono !== "" &&
             this.state.dni !== "" &&
-            this.state.email !== "" &&
             this.state.pais !== "" &&
-            this.state.estado !== "" &&
-            this.state.ciudad !== "" &&
-            this.state.codigoPostal !== "" &&
+            this.state.cp !== "" &&
+            this.state.provincia !== "" &&
             this.state.direccion !== "" &&
-            this.state.telefono1 !== "" &&
-            this.state.telefono2 !== ""
+            this.state.ciudad !== ""
         ) {
-            var dict = this.getAlumnoModel();
-            this.postAlumnoInfo(dict);
+            var repartidorNuevo = {
+                nombre: this.state.nombre,
+                apellido: this.state.apellido,
+                telefono: this.state.telefono,
+                dni: this.state.dni,
+                pais: this.state.pais,
+                cp: this.state.cp,
+                provincia: this.state.provincia,
+                direccion: this.state.direccion,
+                ciudad: this.state.ciudad
+            };
+            RepartidoresDataService.crear(repartidorNuevo);
+            this.props.repartidorCreado(repartidorNuevo);
+            this.setState({ edicion: false, redOnly: true });
         } else {
             this.setState({
                 errorMessageIsOpen: true,
@@ -154,99 +111,8 @@ class FormularioDatosAlumnos extends Component {
         }
     }
 
-    handleChangeTitular(e) {
-        let titular = this.props.titulares[ e.target.value ];
-        this.setState({ titularSeleccionado: e.target.value });
-    }
-
-    handleChangeTurno(e) {
-        let titular = this.props.turnos[ e.target.value ];
-        this.setState({ turnoSeleccionado: e.target.value });
-    }
-    handleCheck = () => {
-        this.setState({gimnasio: true});
-    }
-
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
-    }
-
-    //Api Calls
-    getHotelInfo(email) {
-        this.setState({ loading: true });
-        let hotelInfo = HotelInfo.getInstance().getHotelData()         
-        this.handleGetHotelInfo(hotelInfo)
-    }
-
-    handleGetHotelInfo(hotelInfo) {
-        this.setState({ loading: false });
-
-        if (hotelInfo === undefined || hotelInfo === null) {
-            //show error message if needed
-        } else {
-            let hotelData = hotelInfo.state;
-
-            if (hotelData !== null) {
-                this.setState({
-                    nombre: hotelData.nombre,
-                    razon: hotelData.razon,
-                    email: hotelData.correo,
-                    pais: hotelData.pais,
-                    estado: hotelData.estado,
-                    ciudad: hotelData.ciudad,
-                    codigoPostal: hotelData.codigoPostal,
-                    direccion: hotelData.direccion,
-                    telefono1: hotelData.telefono1,
-                    telefono2: hotelData.telefono2,
-                    titular: hotelData.titular,
-                    jornada: hotelData.jornada,
-                    gimnasio: hotelData.gimnasio,
-                });            
-            }
-        }
-    }
-
-    postAlumnoInfo = (alumnoInfo) => {
-        this.setState({ loading: true });
-        AlumnosAPI.createAlumno(alumnoInfo, this.handlePostAlumnoInfo.bind(this));
-    }
-
-    handlePostAlumnoInfo = async (alumnoInfo) => {
-        this.setState({ loading: false });
-        if (alumnoInfo.error == null) {
-            //post was successful
-            this.setState({ 
-                alumnoInfo: alumnoInfo,
-                edicion: false, 
-                redOnly: true,
-                successMessageIsOpen: true
-            })
-        } else {
-            //get user with email failed
-        }
-    }
-
-    getAlumnoModel() {
-        let titular = this.props.titulares[this.state.titularSeleccionado];
-        let turno = this.props.turnos[this.state.turnoSeleccionado];
-
-        return {
-            nombre: this.state.nombre,
-            apellido: this.state.apellido,
-            dni: this.state.dni,
-            correo: this.state.email,
-            pais: this.state.pais,
-            provincia: this.state.estado,
-            ciudad: this.state.ciudad,
-            codigoPostal: this.state.codigoPostal,
-            direccion: this.state.direccion,
-            telefono1: this.state.telefono1,
-            telefono2: this.state.telefono2,
-            idTitular: titular.id,
-            turno: turno.id,
-            gimnasio: this.state.gimnasio,
-        };
-
     }
 
     //Modal handlers
@@ -258,14 +124,6 @@ class FormularioDatosAlumnos extends Component {
         this.props.titularCreado(this.state.alumnoInfo);
         this.setState({ successMessageIsOpen: false }, this.forceUpdate());
     }
-
-    getSuccessMessage() {
-        if(this.state.gimnasio) {
-            return "Ya estas Inscripto en el Gimnasio B \n Usuario: ESCB_" + this.state.dni + "\n password: 123456"
-        } else {
-            return "Bienvenido al colegio"
-        }
-    }
     
     render() {
         const { classes } = this.props;
@@ -274,7 +132,7 @@ class FormularioDatosAlumnos extends Component {
                 {this.showLoaderIfNeeded()}
                 
                 <ErrorMessageModal title={'Algo salió mal'} errorMessage={this.state.errorMessage} isOpen={this.state.errorMessageIsOpen} closeErrorModal={this.closeErrorModal.bind(this)} />
-                <ErrorMessageModal title={'Alumno Generada con éxito'} errorMessage= { this.getSuccessMessage() } isOpen={this.state.successMessageIsOpen} closeErrorModal={this.closeSuccessModal.bind(this)} />
+                <ErrorMessageModal title={'Repartidor generado con éxito'} errorMessage= { 'Repartidor generado con exito'} isOpen={this.state.successMessageIsOpen} closeErrorModal={this.closeSuccessModal.bind(this)} />
                 <Paper className={classes.paper}>
                     <Grid container spacing={3}>
 
@@ -342,10 +200,10 @@ class FormularioDatosAlumnos extends Component {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 id="Estado"
-                                name="estado"
+                                name="provincia"
                                 label="Estado/Provincia/Región"
                                 fullWidth
-                                value={this.state.estado}
+                                value={this.state.provincia}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
@@ -371,11 +229,11 @@ class FormularioDatosAlumnos extends Component {
                             <TextField
                                 required
                                 id="Código Postal"
-                                name="codigoPostal"
+                                name="cp"
                                 label="Código Postal"
                                 fullWidth
                                 autoComplete="Código Postal"
-                                value={this.state.codigoPostal}
+                                value={this.state.cp}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
@@ -405,7 +263,7 @@ class FormularioDatosAlumnos extends Component {
                                 label="Telefono"
                                 fullWidth
                                 autoComplete="Telefono"
-                                value={this.state.telefono1}
+                                value={this.state.telefono}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
@@ -424,8 +282,8 @@ class FormularioDatosAlumnos extends Component {
     }
 }
 
-FormularioDatosAlumnos.propTypes = {
+FormularioDatosRepartidores.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(FormularioDatosAlumnos);
+export default withStyles(styles)(FormularioDatosRepartidores);
 

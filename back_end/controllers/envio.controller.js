@@ -7,7 +7,7 @@ exports.crear = (req, res) => {
     body = req.body;
 
     // Validamos la request
-    if(!body.id_servicio || !body.direccion || !body.cp || !body.id_cliente || !body.ciudad || !body.id_estado) {
+    if(!body.id_servicio || !body.direccion || !body.cp || !body.id_cliente || !body.ciudad || !body.id_estado || !body.id_repartidor) {
         res.status(400).send({
             message: "Error en el contenido de la request!"
         });
@@ -21,7 +21,8 @@ exports.crear = (req, res) => {
         cp: body.cp,
         id_cliente: body.id_cliente,
         ciudad: body.ciudad,
-        id_estado: body.id_estado
+        id_estado: body.id_estado,
+        id_repartidor: body.id_repartidor
     }
 
     // Guardamos el nuevo envio en la tabla envios
@@ -40,7 +41,7 @@ exports.crear = (req, res) => {
 
 // Obtiene todos los envios
 exports.obtener_todos = (req, res) => {
-    Envios.findAll()
+    Envios.findAll({ include: ["cliente","servicio","estado","repartidor"] })
         .then(data => {
             res.send(data);
         })

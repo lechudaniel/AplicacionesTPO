@@ -1,15 +1,13 @@
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { TextField, Grid, ButtonBase, Typography, Avatar, Button, Paper } from '@material-ui/core';
-import HotelInfo from '../../../Models/Hotel/HotelInfo'
-import FacturasAPI from '../../../Network/Facturas/FacturasAPI'
+import { TextField, Grid, Button, Paper } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorMessageModal from '../../Commons/ErrorMessageModal';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import clientes from '../Clientes/dataClientes';
+
+import ClientesDataService from '../../../Servicios/clientes.servicio';
+import FacturasDataService from '../../../Servicios/facturas.servicio';
 
 const styles = theme => ({
     paper: {
@@ -38,39 +36,72 @@ class FormularioDatosFactura extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titularSeleccionado: null,
-            titularesMenuOpen: false,
-            titularesMenuOpen: false,
-            mesFactura: "",
-            anioFactura: "",
+            monto: "",
+            año: "",
+            mes: "",
+            id_cliente: "",
+
+            clientes: [],
+
             loading: false,
             errorMessageIsOpen: false,
             errorMessage: "",
             successMessageIsOpen: false,
-            titular:"",
-            facturaCreada: null,
         }
+
         this.guardar = this.guardar.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
-        console.log("Facturas");
+        this.getClientes();
+    }
+
+    handleChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    getClientes() {
+        this.setState({loading:true});
+        ClientesDataService.getAll()
+        .then(response => {
+          this.setState({
+            clientes: response.data
+          });
+        })
+        .catch(e => {
+        });
+        this.setState({loading:false});
+    }
+
+    findArrayElementById(array, id) {
+        return array.find((element) => {
+          return element.id === id;
+        })
     }
 
     guardar() {
-        /*if (
-            this.turnoSeleccionado !== null,
-            this.state.mesFactura !== "" &&
-            this.state.anioFactura !== ""
+        if (this.state.monto !== "" &&
+            this.state.año !== "" &&
+            this.state.mes !== "" &&
+            this.state.id_cliente !== ""
         ) {
-            var dict = this.getFacturaModel();
-            this.postFacturaInfo(dict);
+            var facturaNueva = {
+                monto: this.state.monto,
+                año: this.state.año,
+                mes: this.state.mes,
+                id_cliente: this.state.id_cliente
+            };
+            console.log(facturaNueva);
+            FacturasDataService.crear(facturaNueva);
+            this.props.facturaCreada(facturaNueva);
+            this.setState({ edicion: false, redOnly: true });
         } else {
             this.setState({
                 errorMessageIsOpen: true,
                 errorMessage: "Verifique si lleno todos los datos."
             });
-        }*/
+        }
     }
 
     showLoaderIfNeeded() {
@@ -88,80 +119,6 @@ class FormularioDatosFactura extends Component {
         }
     }
 
-    handleChangeMes(e) {
-        this.setState({mesFactura: e.target.value });
-    }
-
-    handleChangeAnio(e) {
-        this.setState({anioFactura: e.target.value });
-    }
-
-    //Turnos Menu
-    handleChangeTurno(e) {
-        this.setState({ alumnoSeleccionado: e.target.value });
-    }
-
-    handleTurnosMenuOpen() {
-        this.setState({ turnosMenuOpen: true });
-    }
-
-    handleTurnosMenuClose() {
-        this.setState({ turnosMenuOpen: false });
-    }
-
-    getTitularMenuValue() {
-        if( this.state.titularSeleccionado === null ) {
-            return null;
-        } else {
-            return this.state.titularSeleccionado.nombre + " "  + this.state.titularSeleccionado.apellido
-        }
-    }
-
-    //Api Calls
-    postFacturaInfo = (facturaInfo) => {
-        this.setState({ loading: true });
-        FacturasAPI.createFactura(facturaInfo, this.handlePostFacturaInfo.bind(this));
-    }
-
-    handlePostFacturaInfo = async (facturaInfo) => {
-        this.setState({ loading: false });
-        if (facturaInfo.error == null) {
-            //post was successful
-            this.setState({ edicion: false, 
-                            redOnly: true,
-                            facturaCreada: facturaInfo,
-                            successMessageIsOpen: true
-                          })
-        } else {
-            //get user with email failed
-        }
-    }
-
-    getFacturaModel() {
-        let titularSeleccionado = this.props.titulares[this.state.titularSeleccionado];
-        let titular = this.props.titulares[this.state.titularSeleccionado];
-        let turno = this.props.turnos[this.state.turnoSeleccionado];
-        return {
-            idTitular: titularSeleccionado.id,
-            mes: this.state.mesFactura,
-            anio: this.state.anioFactura,
-        };
-    }
-
-     //Menu
-     handleTitularesMenuOpen() {
-        this.setState({ titularesMenuOpen: true });
-    }
-
-    handleTitularesMenuClose() {
-        this.setState({ titularesMenuOpen: false });
-    }
-
-    handleChangeTitular(e) {
-        let titular = this.props.titulares[ e.target.value ];
-        this.setState({ titularSeleccionado: e.target.value });
-    }
-
     //Modal handlers
     closeErrorModal() {
         this.setState({ errorMessageIsOpen: false }, this.forceUpdate());
@@ -176,63 +133,65 @@ class FormularioDatosFactura extends Component {
         this.setState({ successMessageIsOpen: false }, this.forceUpdate());
     }
 
-    getFacturaCreadaMessage() {
-        if(this.state.facturaCreada !== null) {
-            return "Pueder ir al banco B con el nro de factura" + this.state.facturaCreada.numeroFactura + " y codigo de pago electronico " +
-            "ESCB_" + this.state.facturaCreada.datosFacturacion.documento + " para realizar el pago."
-        } else {
-            return "Pueder ir al banco B y pagar la misma"
-        }
-    }
-
     render() {
         const { classes } = this.props;
         return (
             <Grid >
                 {this.showLoaderIfNeeded()}
                 <ErrorMessageModal title={'Algo salió mal'} errorMessage={this.state.errorMessage} isOpen={this.state.errorMessageIsOpen} closeErrorModal={this.closeErrorModal.bind(this)} />
-                <ErrorMessageModal title={'Factura Generada con éxito'} errorMessage= { this.getFacturaCreadaMessage() } isOpen={this.state.successMessageIsOpen} closeErrorModal={this.closeSuccessModal.bind(this)} />
-                <Paper className={classes.paper}>
-                    
-                    
+                <ErrorMessageModal title={'Factura Generada con éxito'} errorMessage= { 'Factura Generada'} isOpen={this.state.successMessageIsOpen} closeErrorModal={this.closeSuccessModal.bind(this)} />
+                <Paper className={classes.paper}>     
                         <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
-                            <InputLabel id="demo-mutiple-name-label">Nombre Titular</InputLabel>
-                            <Select
-                            fullWidth
-                            labelId="demo-mutiple-name-label"
-                            id="demo-controlled-open-select"
-                            open={ this.state.titularesMenuOpen }
-                            onClose={ this.handleTitularesMenuClose.bind(this) }
-                            onOpen={ this.handleTitularesMenuOpen.bind(this) }
-                            value = { this.state.titularSeleccionado }
-                            onChange={ e => this.handleChangeTitular(e) }
-                            >
-                            { clientes.map((titular, index) => (
-                                <MenuItem value={index}> { titular.nombre } { titular.apellido} </MenuItem>
-                            ))}
-                            </Select>
+                            <TextField
+                                id="cliente" 
+                                name="id_cliente"
+                                label= "Cliente" 
+                                fullWidth
+                                value={this.findArrayElementById(this.state.clientes, this.state.id_cliente)}
+                                autoComplete="Cliente"
+                                onChange={this.handleChange}                           
+                                select>
+
+                                { this.state.clientes.map((row, index) => (
+                                    <MenuItem value={row.id_cliente}>{row.nombre}  {row.apellido}</MenuItem>
+                                ))}      
+                            </TextField>     
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                id="mesTextField"
-                                name="MesTextField"
+                                id="mes"
+                                name="mes"
                                 label="Mes Factura a emitir"
                                 fullWidth
-                                autoComplete="mesTextField"
-                                value={ this.state.mesFactura }
-                                onChange={ e => this.handleChangeMes(e) }
+                                autoComplete="mes"
+                                value={ this.state.mes }
+                                onChange={this.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                id="anio"
-                                name="Anio"
+                                id="año"
+                                name="año"
                                 label="Año Factura a Emitir"
                                 fullWidth
-                                autoComplete="anio"
-                                value={this.state.anioFactura}
-                                onChange={ e => this.handleChangeAnio(e) }
+                                autoComplete="año"
+                                value={this.state.año}
+                                onChange={this.handleChange}
+                                InputProps={{
+                                    readOnly: false,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="monto"
+                                name="monto"
+                                label="Monto"
+                                fullWidth
+                                autoComplete="monto"
+                                value={this.state.monto}
+                                onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: false,
                                 }}
