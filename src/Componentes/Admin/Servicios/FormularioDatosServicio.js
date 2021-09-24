@@ -10,7 +10,6 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import CobranzasAPI from '../../../Network/Cobranzas/CobranzasAPI'
-import FormularioDatosTarjeta from './FormularioDatosTarjeta';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -54,28 +53,15 @@ class FormularioDatosCobranza extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titularSeleccionado: null,
-            titularesMenuOpen: false,
-            titularesMenuOpen: false,
-            lote: "",
-            numeroFactura: "",
-            titular: "",
+            id: "",
+            nombre: "",
+            tamaño: "",
+            velocidad: "",
             edicion: true,
             redOnly: false,
             lastResponse: null,
-            titular: "",
             loading: false,
             errorMessageIsOpen: false,
-            errorMessage: "",
-            mes:"",
-            anio:"",
-            pagada:false,
-            totalCuota:"",
-            numeroTransaccion:"",
-            tarjetaIsOpen: false,
-            mesFactura: "",
-            anioFactura: "",
-            formaDePago: "",
             cobranzaCreada: null,
             successMessageIsOpen: false,
 
@@ -227,7 +213,6 @@ class FormularioDatosCobranza extends Component {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogContent className="dialogContent">
-                        <FormularioDatosTarjeta handleCloseModal={this.handleCloseModal.bind(this)}/>
                     </DialogContent>
                     <DialogActions>
                     </DialogActions>
@@ -238,38 +223,29 @@ class FormularioDatosCobranza extends Component {
                     <Grid container spacing={3}>
                         
                         <Grid item xs={12} sm={6}>
-                        <InputLabel id="demo-mutiple-name-label">Nombre Titular</InputLabel>
-                            <Select
-                            fullWidth
-                            labelId="demo-mutiple-name-label"
-                            id="demo-controlled-open-select"
-                            open={ this.state.titularesMenuOpen }
-                            onClose={ this.handleTitularesMenuClose.bind(this) }
-                            onOpen={ this.handleTitularesMenuOpen.bind(this) }
-                            value = { this.state.titularSeleccionado }
-                            onChange={ e => this.handleChangeTitular(e) }
-                            >
-                            { clientes.map((titular, index) => (
-                                <MenuItem value={index}> { titular.nombre } { titular.apellido} </MenuItem>
-                            ))}
-                            </Select>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                                <form noValidate>
-                                    <TextField id="date" value={this.state.fechaEmision} label="Fecha de pago" type = "date"
-                                    defaultValue="2020-11-26"
-                                    InputLabelProps={{shrink:true,}}/>
-                                </form>
+                        <TextField
+                                required
+                                id="nombre"
+                                name="nombre"
+                                label="Nombre del Servicio"
+                                fullWidth
+                                autoComplete="Nombre del Servicio"
+                                value={this.state.nombre}
+                                onChange={this.handleChange}
+                                InputProps={{
+                                    readOnly: this.state.redOnly,
+                                }}
+                            />
                         </Grid>                   
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
-                                id="mes"
-                                name="mes"
-                                label="Mes"
+                                id="tamaño"
+                                name="tamaño"
+                                label="Tamaño"
                                 fullWidth
-                                autoComplete="mes"
-                                value={this.state.mes}
+                                autoComplete="Tamaño"
+                                value={this.state.tamaño}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
@@ -279,71 +255,23 @@ class FormularioDatosCobranza extends Component {
                         
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                id="anio"
-                                name="anio"
-                                label="Año"
+                                required
+                                id="velocidad"
+                                name="velocidad"
+                                label="Velocidad"
                                 fullWidth
-                                autoComplete="anio"
-                                value={this.state.anio}
+                                autoComplete="Velocidad"
+                                value={this.state.velocidad}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Select
-                                native
-                                value={this.state.formaDePago}
-                                onChange={this.handleChange}
-                                inputProps={{
-                                    name: 'formaDePago',
-                                    id: 'formaDePago',
-                                }}
-                                >
-
-                                <option value='' selected>Seleccionar opción</option>
-                                <option value={10}>Tarjeta de crédito</option>
-                                <option value={20}>Tarjeta de débito</option>
-                                <option value={30}>Efectivo</option>
-                                <option value={40}>Cheque</option>
-                          
-                            </Select>
-                        </Grid> 
-                        <Grid item xs={12} sm={6}>
-                        {(this.state.formaDePago==10 || this.state.formaDePago==20) ? 
-                        <TextField
-                        id="lote"
-                        name="lote"
-                        label="Lote"
-                        fullWidth
-                        autoComplete="anio"
-                        value={this.state.lote}
-                        onChange={this.handleChange}
-                        InputProps={{
-                            readOnly: this.state.redOnly,
-                        }}
-                    />
-                    : <TextField
-                    id="lote"
-                    name="lote"
-                    label="Lote"
-                    fullWidth
-                    autoComplete="anio"
-                    value={this.state.lote}
-                    onChange={this.handleChange}
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />}
-                        
-                        </Grid> 
-                       
-
                     </Grid>
                 </Paper>
                 <Button className = { classes.createButton } variant= "contained" onClick={ this.guardar.bind(this) } color="primary" autoFocus>
-                    Confirmar Pago
+                    Crear Servicio
                 </Button>
             </Grid>
         );
