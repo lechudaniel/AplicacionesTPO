@@ -43,21 +43,12 @@ class FormularioDatosEmpleados extends Component {
             nombre: "",
             apellido: "",
             email: "",
-            pais: "",
-            estado: "",
             ciudad: "",
             codigoPostal: "",
             direccion: "",
-            telefono1: "",
-            edicion: true,
+            telefono: "",
             redOnly: false,
             lastResponse: null,
-            Categoria: "",
-            Puesto: "",
-            CargaHoraria: "",
-            Sueldo: "",
-            FechaIngreso: "",
-           
 
             loading: false,
             errorMessageIsOpen: false,
@@ -74,16 +65,14 @@ class FormularioDatosEmpleados extends Component {
 
     guardar() {
         var clienteNuevo = [{
-            id: 0,
             nombre: this.state.nombre,
             apellido: this.state.apellido,
-            telefono: this.state.telefono1,
+            telefono: this.state.telefono,
             tipo: this.state.Categoria,
             ciudad: this.state.ciudad,
             correo: this.state.correo,
         }]
         clientes.push(clienteNuevo);
-        console.log(clientes);
         this.setState({ edicion: false, redOnly: true });
         /*if (this.state.nombre !== "" &&
             this.state.apellido !== "" &&

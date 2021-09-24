@@ -29,12 +29,15 @@ db.envios = require("./envio.model.js")(sequelize,Sequelize);
 db.repartidor_envios = require("./repartidor_envio.model.js")(sequelize,Sequelize);
 
 // Un cliente tiene una foreign key "id_tipo_cliente" que hace referencia a una entrada de la tabla "tipo_clientes"
-db.tipo_clientes.hasOne(db.clientes, { foreignKey: 'id_tipo_cliente' });
+db.clientes.belongsTo(db.tipo_clientes, { as: 'tipo', foreignKey: 'id_tipo_cliente'});
 
 // Una cobranza tiene una foreign key "id_cliente" que hace referencia a un entrada de la tabla "clientes"
 db.clientes.hasOne(db.cobranzas, { foreignKey: 'id_cliente' });
+db.cobranzas.belongsTo(db.clientes)
 
 db.clientes.hasOne(db.envios, { foreignKey: 'id_cliente' });
+
+
 db.servicios.hasOne(db.envios, { foreignKey: 'id_servicio' });
 db.estados.hasOne(db.envios, { foreignKey: 'id_estado' });
 

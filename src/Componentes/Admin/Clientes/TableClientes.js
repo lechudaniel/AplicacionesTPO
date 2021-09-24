@@ -17,12 +17,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormularioDatosEmpleados from './FormularioDatosClientes';
-import clientes from './dataClientes';
-
-// Generate Order Data
-function createData(id,nombre, apellido, email, telefono1, ciudad) {
-    return { id, nombre, apellido, email, telefono1, ciudad };
-}
 
 const useStyles = makeStyles(theme => ({
     seeMore: {
@@ -78,7 +72,6 @@ export default function Orders(props) {
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
     const addButtonPressed = () => {
-        console.log(clientes);
         setModalIsOpen(true);
     };
 
@@ -142,14 +135,14 @@ export default function Orders(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        { clientes.map((row, index) => (
+                        { props.clientes.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell>{row.nombre}</TableCell>
                                 <TableCell>{row.apellido}</TableCell>
-                                <TableCell>{row.correo}</TableCell>
+                                <TableCell>{row.mail}</TableCell>
                                 <TableCell>{row.telefono}</TableCell>
                                 <TableCell>{row.ciudad}</TableCell>
-                                <TableCell>{row.tipo}</TableCell>
+                                <TableCell>{row.tipo.tipo_cliente}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

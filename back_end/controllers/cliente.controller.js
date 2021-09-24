@@ -40,7 +40,7 @@ exports.crear = (req, res) => {
 
 // Obtiene todos los clientes
 exports.obtener_todos = (req, res) => {
-    Clientes.findAll()
+    Clientes.findAll({ include: ["tipo"] })
         .then(data => {
             res.send(data);
         })
