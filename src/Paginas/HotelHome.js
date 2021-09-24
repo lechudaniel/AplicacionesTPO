@@ -24,6 +24,7 @@ import Alumnos from '../Componentes/Admin/Repartidores/Repartidores';
 import Clientes from '../Componentes/Admin/Clientes/Clientes';
 import Cobros from '../Componentes/Admin/Cobros/Cobros';
 import Facturas from '../Componentes/Admin/Facturación/Facturas';
+import Servicios from '../Componentes/Admin/Servicios/Servicios';
 
 const drawerWidth = 240;
 
@@ -381,6 +382,7 @@ export default function PanelControl(props) {
                         <div className={classes.appBarSpacer} />
 
                         <Container maxWidth="lg" className={classes.container}>
+                        <Servicios facturas = { facturas } titulares = { titulares } turnos = { turnos } alumnos = { alumnos } />
                             
                         </Container>
                     </main>

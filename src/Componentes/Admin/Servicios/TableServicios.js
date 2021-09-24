@@ -7,22 +7,27 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from '../Title';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import CheckIcon from '@material-ui/icons/Check';
+import BlockIcon from '@material-ui/icons/Block';
 import { IconButton, Paper, InputBase, AppBar, Toolbar, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormularioDatosCobranza from './FormularioDatosCobranza';
+import FormularioDatosServicio  from './FormularioDatosServicio'
 
 // Generate Order Data
-function createData(id,numeroTransaccion, alumno, titular, totalCuota, fechaEmision) {
-    return { id, numeroTransaccion, alumno, titular, totalCuota, fechaEmision };
+function createData(id,Nombre, Tamaño, Velocidad) {
+    return { id, Nombre, Tamaño, Velocidad, };
 }
 
 const rows = [
-    createData(0, '000000001', 'Sebastian Gomez', '$27350', '02-09-2021','000000011'),
-    createData(1, '000000002', 'Nicolas Roger', '$27350', '02-09-2021', '000000012'),
+    createData(0, 'Express', 'Carta', 'Prioritario'),
+    createData(1, 'Normal', "Paquete hasta 3 KG", 'Normal'),
+    createData(2, 'Economico', "Paquete hasta 1 KG", 'Sin prioridad'),
+
 ];
 
 const useStyles = makeStyles(theme => ({
@@ -106,9 +111,9 @@ export default function Orders(props) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             >
-            <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Complete los datos del pago </DialogTitle>
+            <DialogTitle id="alert-dialog-title" style={{ fontWeight: 'bold', textAlign: 'center' }}  > Complete los datos del Servicio </DialogTitle>
             <DialogContent className="dialogContent">
-             <FormularioDatosCobranza cobranzaCreado = { cobranzaCreado } turnos = { props.turnos } titulares = {props.titulares} />
+             <FormularioDatosServicio cobranzaCreado = { cobranzaCreado } turnos = { props.turnos } titulares = {props.titulares} />
             </DialogContent>
             <DialogActions>
             </DialogActions>
@@ -129,19 +134,19 @@ export default function Orders(props) {
                         />
                     </div>
                     <Button variant="contained" color="secondary" onClick={ addButtonPressed } >
-                     Registrar pago
+                     Crear nuevo Servicio
                      </Button>
                 </Toolbar>
             </AppBar>
             <Paper className={classes.paper}>
-                <Title>Pagos realizados</Title>
+                <Title>Servicios disponibles</Title>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Número de transacción</TableCell>
-                            <TableCell>Monto</TableCell>
-                            <TableCell>Fecha Emision</TableCell>
-                            <TableCell>Titular</TableCell>
+                            <TableCell>Número de Servicio</TableCell>
+                            <TableCell>Nombre</TableCell>
+                            <TableCell>Tamaño</TableCell>
+                            <TableCell>Velocidad de Entrega</TableCell>
                      
                            
                         </TableRow>
@@ -149,10 +154,10 @@ export default function Orders(props) {
                     <TableBody>
                         { cobranzas.map((row, index) => (
                             <TableRow key={index}>
-                                <TableCell>{row.numeroTransaccion}</TableCell>
-                                <TableCell>{row.titular}</TableCell>
-                                <TableCell>{row.totalCuota}</TableCell>
-                                <TableCell>{row.fechaEmision}</TableCell>
+                                <TableCell>{row.id}</TableCell>
+                                <TableCell>{row.Nombre}</TableCell>
+                                <TableCell>{row.Tamaño}</TableCell>
+                                <TableCell>{row.Velocidad}</TableCell>
                                
                             </TableRow>
                         ))}
@@ -160,7 +165,7 @@ export default function Orders(props) {
                 </Table>
                 <div className={classes.seeMore}>
                     <Link color="primary" >
-                        Ver Más Pagos
+                        Ver Más Servicios
                      </Link>
                 </div>
             </Paper>

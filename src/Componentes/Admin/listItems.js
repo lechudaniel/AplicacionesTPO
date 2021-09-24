@@ -42,13 +42,7 @@ export default function mainListItems(props) {
         </ListItemIcon>
         <ListItemText primary="Repartidores" />
       </ListItem>
-      {/*<ListItem button onClick={props.datosOpen}>
-        <ListItemIcon>
-          <DescriptionIcon />
-        </ListItemIcon>
-        <ListItemText primary="Datos" />
-      </ListItem>*/}
-      <ListItem /*button onClick={props.serviciosOpen}*/>
+      <ListItem button onClick={props.serviciosOpen}>
         <ListItemIcon>
           <AddToPhotosIcon  />
         </ListItemIcon>
