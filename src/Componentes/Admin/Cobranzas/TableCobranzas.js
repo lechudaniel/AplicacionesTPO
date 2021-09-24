@@ -128,7 +128,7 @@ export default function Orders(props) {
                             <TableCell>Total</TableCell>
                             <TableCell>Fecha de Emision</TableCell>
                             <TableCell>Forma de Pago</TableCell>
-                           
+                            <TableCell>Lote</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -139,6 +139,7 @@ export default function Orders(props) {
                                 <TableCell>{row.monto}</TableCell>
                                 <TableCell>{row.fecha_emision}</TableCell>
                                 <TableCell>{row.forma_de_pago}</TableCell>
+                                <TableCell>{row.lote}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

@@ -27,8 +27,8 @@ db.sequelize.sync({ force: true }).then(() => {
     db.envios.create({id_servicio: "2", direccion: "calle falsa 123", cp: "1234", id_cliente: "1", ciudad: "CABA", id_estado: "3", id_repartidor: "2"});
     db.envios.create({id_servicio: "1", direccion: "calle falsa 234", cp: "1234", id_cliente: "2", ciudad: "CABA", id_estado: "1", id_repartidor: "2"});
 
-    db.cobranzas.create({monto:"200", fecha_emision:"20/05/2021", forma_de_pago:"Tarjeta de Credito", id_cliente:"1"});
-    db.cobranzas.create({monto:"300", fecha_emision:"26/05/2021", forma_de_pago:"Tarjeta de Debito", id_cliente:"2"});
+    db.cobranzas.create({monto:"200", fecha_emision:"20/05/2021", forma_de_pago:"Tarjeta de Credito", id_cliente:"1", lote:"5243543"});
+    db.cobranzas.create({monto:"300", fecha_emision:"26/05/2021", forma_de_pago:"Tarjeta de Debito", id_cliente:"2", lote:"9102"});
 
     db.facturas.create({monto:"200", año:"2021", mes:"05", id_cliente:"1"});
     db.facturas.create({monto:"300", año:"2021", mes:"05", id_cliente:"2"});

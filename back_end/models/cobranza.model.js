@@ -13,6 +13,9 @@ module.exports = (sequelize, Sequelize) => {
         },
         forma_de_pago: {
             type: Sequelize.STRING
+        },
+        lote: {
+            type: Sequelize.STRING
         }
     });
 

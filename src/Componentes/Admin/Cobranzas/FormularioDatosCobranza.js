@@ -60,6 +60,7 @@ class FormularioDatosCobranza extends Component {
             fecha_emision: "",
             forma_de_pago: "",
             id_cliente: "",
+            lote: " ",
 
             edicion: true,
             redOnly: false,
@@ -100,13 +101,15 @@ class FormularioDatosCobranza extends Component {
             this.state.forma_de_pago !== "" &&
             this.state.id_cliente !== "" &&
             this.state.fecha_emision !== "" &&
-            this.state.monto !== ""
+            this.state.monto !== "" &&
+            this.state.lote !== ""
         ) {
             var cobranzaNueva = {
                 forma_de_pago: this.state.forma_de_pago,
                 id_cliente: this.state.id_cliente,
                 fecha_emision: this.state.fecha_emision,
-                monto: this.state.monto
+                monto: this.state.monto,
+                lote: this.state.lote
             }
             console.log(cobranzaNueva);
             CobranzasDataService.crear(cobranzaNueva);
@@ -254,6 +257,20 @@ class FormularioDatosCobranza extends Component {
                                 fullWidth
                                 autoComplete="monto"
                                 value={this.state.monto}
+                                onChange={this.handleChange}
+                                InputProps={{
+                                    readOnly: this.state.redOnly,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="lote"
+                                name="lote"
+                                label="Lote"
+                                fullWidth
+                                autoComplete="lote"
+                                value={this.state.lote}
                                 onChange={this.handleChange}
                                 InputProps={{
                                     readOnly: this.state.redOnly,

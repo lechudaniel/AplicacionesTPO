@@ -7,7 +7,7 @@ exports.crear = (req, res) => {
     body = req.body;
 
     // Validamos la request
-    if(!body.monto || !body.fecha_emision || !body.id_cliente || !body.forma_de_pago) {
+    if(!body.monto || !body.fecha_emision || !body.id_cliente || !body.forma_de_pago || !body.lote) {
         res.status(400).send({
             message: "Error en el contenido de la request!"
         });
@@ -19,7 +19,8 @@ exports.crear = (req, res) => {
         monto: body.monto,
         fecha_emision: body.fecha_emision,
         id_cliente: body.id_cliente,
-        forma_de_pago: body.forma_de_pago
+        forma_de_pago: body.forma_de_pago,
+        lote: body.lote
     }
 
     // Guardamos el nuevo cobranza en la tabla cobranzas
