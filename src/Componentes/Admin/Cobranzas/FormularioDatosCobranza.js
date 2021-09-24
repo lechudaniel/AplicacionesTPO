@@ -263,7 +263,9 @@ class FormularioDatosCobranza extends Component {
                                 }}
                             />
                         </Grid>
+
                         <Grid item xs={12} sm={6}>
+                        {(this.state.forma_de_pago == "Tarjeta de Debito" || this.state.forma_de_pago === "Tarjeta de Credito") ? 
                             <TextField
                                 id="lote"
                                 name="lote"
@@ -276,7 +278,21 @@ class FormularioDatosCobranza extends Component {
                                     readOnly: this.state.redOnly,
                                 }}
                             />
+                        : <TextField
+                            id="lote"
+                            name="lote"
+                            label="Lote"
+                            fullWidth
+                            autoComplete="lote"
+                            value={this.state.lote}
+                            onChange={this.handleChange}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />}
+                            
                         </Grid>
+
                         <Grid item xs={12} sm={6}>
                             <Select
                                 native
