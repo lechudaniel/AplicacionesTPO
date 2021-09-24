@@ -138,9 +138,9 @@ export default function Orders(props) {
                                 <TableCell>{row.servicio.servicio}</TableCell>
                                 <TableCell>{row.direccion}</TableCell>
                                 <TableCell>{row.cp}</TableCell>
-                                <TableCell>{row.cliente.nombre}</TableCell>
+                                <TableCell>{row.cliente.nombre} {row.cliente.apellido}</TableCell>
                                 <TableCell>{row.ciudad}</TableCell>
-                                <TableCell>{row.repartidor.nombre}</TableCell>
+                                <TableCell>{row.repartidor.nombre} {row.repartidor.apellido}</TableCell>
                                 <TableCell>{row.estado.estado}</TableCell>
 
                             </TableRow>

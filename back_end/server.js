@@ -23,6 +23,15 @@ db.sequelize.sync({ force: true }).then(() => {
 
     db.repartidores.create({nombre: "Juan", apellido:"Lopez", mail:"juanlopez95@gmail.com", dni:"123456", direccion:"calle falsa 123", telefono:"1234-1234", ciudad:"CABA", pais:"Argentina",provincia:"Buenos Aires", cp:"1234"});
     db.repartidores.create({nombre: "Laura", apellido:"Gonzalez", mail:"lauragonzalez@gmail.com", dni:"123456", direccion:"calle falsa 123", telefono:"1234-1234", ciudad:"CABA", pais:"Argentina",provincia:"Buenos Aires", cp:"1234"});
+
+    db.envios.create({id_servicio: "2", direccion: "calle falsa 123", cp: "1234", id_cliente: "1", ciudad: "CABA", id_estado: "3", id_repartidor: "2"});
+    db.envios.create({id_servicio: "1", direccion: "calle falsa 234", cp: "1234", id_cliente: "2", ciudad: "CABA", id_estado: "1", id_repartidor: "2"});
+
+    db.cobranzas.create({monto:"200", fecha_emision:"20/05/2021", forma_de_pago:"Tarjeta de Credito", id_cliente:"1"});
+    db.cobranzas.create({monto:"300", fecha_emision:"26/05/2021", forma_de_pago:"Tarjeta de Debito", id_cliente:"2"});
+
+    db.facturas.create({monto:"200", año:"2021", mes:"05", id_cliente:"1"});
+    db.facturas.create({monto:"300", año:"2021", mes:"05", id_cliente:"2"});
 });
 
 var corsOptions = {
