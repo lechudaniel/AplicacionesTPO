@@ -149,7 +149,7 @@ export default function Orders(props) {
                 </Table>
                 <div className={classes.seeMore}>
                     <Link color="primary" >
-                        Ver Mas Solicitudes
+                        Ver Mas Envios
                      </Link>
                 </div>
             </Paper>

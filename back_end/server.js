@@ -8,7 +8,6 @@ const db = require("./models");
 db.sequelize.sync({ force: true }).then(() => {
     db.tipo_clientes.create({ tipo_cliente: "Persona Fisica"});
     db.tipo_clientes.create({ tipo_cliente: "Persona Juridica"});
-    db.tipo_clientes.create({ tipo_cliente: "Persona Prueba"});
 
     db.estados.create({estado:"En espera"});
     db.estados.create({estado:"En camino"});
@@ -17,6 +16,13 @@ db.sequelize.sync({ force: true }).then(() => {
     db.servicios.create({servicio:"Express", tamaño:"Carta", velocidad:"Prioritario"});
     db.servicios.create({servicio:"Normal", tamaño:"Paquete hasta 3KG", velocidad:"Normal"});
     db.servicios.create({servicio:"Economico", tamaño:"Paquete hasta 1KG", velocidad:"Sin prioridad"});
+
+    db.clientes.create({nombre: "Julian", apellido:"Ramirez", mail:"julian_ramirez87@gmail.com", telefono:"1234-1234", ciudad:"CABA", pais:"Argentina",provincia:"Buenos Aires", cp:"1234", "id_tipo_cliente":1});
+    db.clientes.create({nombre: "Maria", apellido:"Gonzalez", mail:"maria_gonzalez@gmail.com", telefono:"1234-1234", ciudad:"CABA", pais:"Argentina",provincia:"Buenos Aires", cp:"1234", "id_tipo_cliente":1});
+    db.clientes.create({nombre: "Hernan", apellido:"Lopez", mail:"hernanlopez95@gmail.com", telefono:"1234-1234", ciudad:"CABA", pais:"Argentina",provincia:"Buenos Aires", cp:"1234", "id_tipo_cliente":1});
+
+    db.repartidores.create({nombre: "Juan", apellido:"Lopez", mail:"juanlopez95@gmail.com", dni:"123456", direccion:"calle falsa 123", telefono:"1234-1234", ciudad:"CABA", pais:"Argentina",provincia:"Buenos Aires", cp:"1234"});
+    db.repartidores.create({nombre: "Laura", apellido:"Gonzalez", mail:"lauragonzalez@gmail.com", dni:"123456", direccion:"calle falsa 123", telefono:"1234-1234", ciudad:"CABA", pais:"Argentina",provincia:"Buenos Aires", cp:"1234"});
 });
 
 var corsOptions = {

@@ -127,7 +127,7 @@ export default function Orders(props) {
                             <TableCell>Titular</TableCell>
                             <TableCell>Total</TableCell>
                             <TableCell>Fecha de Emision</TableCell>
-                            <TableCell>Forma de Pagon</TableCell>
+                            <TableCell>Forma de Pago</TableCell>
                            
                         </TableRow>
                     </TableHead>
