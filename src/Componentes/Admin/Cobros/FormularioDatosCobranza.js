@@ -57,6 +57,7 @@ class FormularioDatosCobranza extends Component {
             titularSeleccionado: null,
             titularesMenuOpen: false,
             titularesMenuOpen: false,
+            lote: "",
             numeroFactura: "",
             titular: "",
             edicion: true,
@@ -310,13 +311,31 @@ class FormularioDatosCobranza extends Component {
                             </Select>
                         </Grid> 
                         <Grid item xs={12} sm={6}>
-                        {(this.state.formaDePago==10 || this.state.formaDePago==20) ? <Button 
-                         variant="outlined" color="primary" 
-                                                   onClick={ this.addButtonTarjeta }>
-                             COMPLETAR DATOS DE TARJETA
-                        </Button> : <Button variant="outlined" color="primary" disabled>
-                             COMPLETAR DATOS DE TARJETA
-                        </Button>}
+                        {(this.state.formaDePago==10 || this.state.formaDePago==20) ? 
+                        <TextField
+                        id="lote"
+                        name="lote"
+                        label="Lote"
+                        fullWidth
+                        autoComplete="anio"
+                        value={this.state.lote}
+                        onChange={this.handleChange}
+                        InputProps={{
+                            readOnly: this.state.redOnly,
+                        }}
+                    />
+                    : <TextField
+                    id="lote"
+                    name="lote"
+                    label="Lote"
+                    fullWidth
+                    autoComplete="anio"
+                    value={this.state.lote}
+                    onChange={this.handleChange}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />}
                         
                         </Grid> 
                        
