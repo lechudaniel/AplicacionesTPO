@@ -265,6 +265,22 @@ class FormularioDatosCobranza extends Component {
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
+                        
+
+                        {(this.state.forma_de_pago=="Tarjeta de Debito" || this.state.forma_de_pago=="Tarjeta de Credito") ? 
+                         <Button variant="outlined" color="primary" onClick={ this.addButtonTarjeta }>
+                              COMPLETAR DATOS DE TARJETA
+                         </Button> : <Button variant="outlined" color="primary" disabled>
+                              COMPLETAR DATOS DE TARJETA
+                        </Button>
+                      
+                        }
+
+
+
+
+
+
                         {(this.state.forma_de_pago == "Tarjeta de Debito" || this.state.forma_de_pago === "Tarjeta de Credito") ? 
                             <TextField
                                 id="lote"
